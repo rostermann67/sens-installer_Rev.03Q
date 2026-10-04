@@ -1,0 +1,11 @@
+SENS Installer NEXT Rev.03R — FW03L FIX2 UTF-8
+
+Atualização somente dos binários do firmware para a compilação:
+SENS_NEXT_UNIVERSAL_REV03L_I2C_GENERIC_V1_FIX2_UTF8
+
+Os nomes dos arquivos da pasta firmware foram deliberadamente mantidos iguais
+aos usados anteriormente no GitHub (REV03K_*), permitindo substituir os
+arquivos existentes sem alterar URLs/manifests.
+
+Correção FIX2: recepção serial aceita UTF-8 nos campos textuais da configuração
+genérica, incluindo grandezas como "Iluminância".
