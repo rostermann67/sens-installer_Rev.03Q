@@ -1,0 +1,33 @@
+SENS INSTALLER V2.10.6 — REV15D2.3 URL PLATFORM — CANDIDATO FINAL KIT
+
+Base:
+- Interface V2.10.5.9 URL Platform
+- Firmware compilado Rev.15D2.3 URL PLATFORM NVS
+
+Incluído nesta versão:
+1. Binários Rev15D2.3 reais.
+2. Manifesto "DO ZERO" usando merged.bin D2.3.
+3. Manifesto "PRESERVAR DADOS" usando bootloader + partitions + boot_app0 + app D2.3.
+4. Campo URL da SENS Platform integrado ao bloco BASIC:
+   Installer -> BASIC url=... -> COMMIT -> NVS sens-runtime/platUrl -> reload.
+5. Olho na senha Wi-Fi para mostrar/ocultar durante a digitação.
+6. Nenhuma alteração intencional em buffer, ACK, store-and-forward ou sensores.
+
+TESTE RECOMENDADO
+A) Use primeiro UM ESP32 de teste.
+B) Grave com "ATUALIZAR — PRESERVAR DADOS".
+C) Na Etapa 1 informe a URL /exec da implantação Web App da SENS Platform.
+D) Grave a configuração.
+E) Configure Wi-Fi.
+F) No painel final confirme:
+   - Firmware Rev15D2.3
+   - Nome / Serial
+   - URL da Platform correta
+   - Transação COMMIT confirmada
+   - Fingerprint presente
+G) No monitor serial confirme envio HTTP à nova URL.
+H) Na Platform confirme que o equipamento aparece e grava normalmente.
+
+OBSERVAÇÃO
+O boot_app0 é o binário genérico do ESP32 reaproveitado da Rev15D2.2.
+Esse componente não contém a lógica SENS nem a URL da Platform.

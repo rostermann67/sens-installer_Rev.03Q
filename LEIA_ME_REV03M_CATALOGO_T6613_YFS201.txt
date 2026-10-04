@@ -1,0 +1,8 @@
+SENS INSTALLER NEXT Rev.03M — CATÁLOGO T6613 + YF-S201
+
+- Firmware embarcado preservado: Rev.03K.
+- T6613 movido visualmente para o CATÁLOGO; usa o mesmo campo/configuração consolidada s_t6613, portanto preserva o caminho funcional atual.
+- YF-S201 nasce recolhido; ao selecionar, mostra somente GPIO.
+- Perfil YF-S201 permanece fixo no catálogo: 450 pulsos/L, janela 1000 ms, fator 60, saída L/min.
+- INTERFACES / DRIVERS > UART passa a representar a futura UART GENÉRICA. Nesta revisão ela é apenas indicada; leitura UART genérica ainda não é habilitada no firmware K.
+- Todos os details continuam recolhidos após F5.

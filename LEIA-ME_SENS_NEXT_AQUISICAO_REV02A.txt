@@ -1,0 +1,27 @@
+SENS INSTALLER NEXT — AQUISIÇÃO Rev.02A
+17/09/2026
+
+Mudança conceitual do Installer, preservando os binários CONVERSOR Rev.02 já testados:
+- CATÁLOGO: sensores de configuração rápida; T6613 saiu do Catálogo.
+- INTERFACE / DRIVER: T6613 disponível por UART como driver próprio.
+- CONVERSOR: ADC-I2C / ADS1115 independente do modelo do instrumento.
+- Campo Instrumento/modelo é metadado de configuração (ex.: Telaire T8100).
+- CONVERSOR parametriza AIN0..AIN3, entrada elétrica, escala, divisor e média móvel.
+- Nesta Rev.02 HOT a saída científica do CONVERSOR permanece CO2/ppm para manter compatibilidade com o firmware/SDF já validado antes da aferição.
+- Slots genéricos foram retirados da experiência principal do usuário, mas o motor interno foi preservado para compatibilidade.
+
+HOT T8100 sugerido:
+CONVERSOR ADS1115 = ATIVO
+Instrumento/modelo = Telaire T8100
+AIN1
+Entrada = 0 a 4 V
+Escala = 0 a 2000 ppm
+Divisor = SEM DIVISOR
+Fator divisor = 1
+Média móvel = ATIVA
+Janela = 10
+Papel = REFERENCIA
+
+T6613 por UART:
+INTERFACE / DRIVER -> UART — driver T6613
+Não ativar simultaneamente o CONVERSOR nesta Rev.02.

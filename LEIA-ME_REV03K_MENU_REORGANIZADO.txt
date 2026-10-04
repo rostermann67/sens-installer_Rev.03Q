@@ -1,0 +1,14 @@
+SENS INSTALLER NEXT — Rev.03K — REORGANIZAÇÃO VISUAL
+
+Base: Rev.03J ACK PROJECT_STATE DIAGNÓSTICO.
+
+Alterações desta revisão:
+- INTERFACE / DRIVER -> INTERFACES / DRIVERS.
+- Criado submenu UART, contendo o driver T6613 já existente.
+- CONVERSOR — ADC-I²C / ADS1115 -> CONVERSORES.
+- Criado submenu ADC-I²C / ADS1115, preservando todos os campos/IDs/configurações existentes.
+- Em F5/reabertura, todos os elementos <details> iniciam recolhidos.
+- Configurações salvas continuam sendo restauradas; apenas o estado visual aberto/fechado não é persistido.
+- Nenhuma alteração intencional em firmware, gravação, NVS, SDF, ACK, PROJECT_STATE ou protocolo serial.
+
+Objetivo: preparar a casca do Installer para expansão posterior do Catálogo e drivers genéricos.

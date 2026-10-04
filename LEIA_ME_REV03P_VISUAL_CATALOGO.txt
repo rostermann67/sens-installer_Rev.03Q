@@ -1,0 +1,10 @@
+SENS INSTALLER NEXT — Rev.03P
+Firmware mantido: Rev.03K
+
+Alteração exclusivamente visual no CATÁLOGO:
+- todos os sensores exibem a grandeza em segunda linha;
+- grandezas em fonte 10 px;
+- Termopar K permanece em uma única linha;
+- YF-S201 passa a card compacto ao lado do T6613;
+- ao marcar YF-S201, a configuração do GPIO continua aparecendo abaixo;
+- nenhuma alteração no firmware, SDF, ACK, buffer, aferição ou drivers.

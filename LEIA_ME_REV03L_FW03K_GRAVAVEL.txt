@@ -1,0 +1,7 @@
+SENS INSTALLER NEXT Rev.03L + Firmware Rev.03K
+
+DO ZERO: merged Rev.03K @ 0x0000
+PRESERVAR: bootloader @0x1000; partitions @0x8000; boot_app0 @0xE000; app @0x10000.
+
+Base visual: Rev.03L Catálogo YF-S201.
+Firmware: Rev.03K Pulso/Catálogo compilado pelo usuário.

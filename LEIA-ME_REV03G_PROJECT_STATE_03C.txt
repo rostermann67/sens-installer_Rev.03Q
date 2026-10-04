@@ -1,0 +1,15 @@
+SENS INSTALLER NEXT — UNIVERSAL Rev.03G — PROJECT STATE 03C
+
+Gerado a partir do Installer Rev.03F funcional, preservando a estrutura do Installer.
+Firmware incorporado: SENS_NEXT_UNIVERSAL_REV03G_PROJECT_STATE_03C.
+
+INSTALAR SENS DO ZERO:
+- usa o arquivo MERGED em 0x0000.
+
+ATUALIZAR — PRESERVAR DADOS:
+- bootloader: 0x1000
+- partitions: 0x8000
+- boot_app0: 0xE000
+- aplicação: 0x10000
+
+Os offsets seguem exatamente o flash_args fornecido pela compilação Rev.03G.

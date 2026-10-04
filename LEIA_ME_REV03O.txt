@@ -1,0 +1,9 @@
+SENS INSTALLER NEXT Rev.03O
+
+Base do fluxo PRESERVAR: Rev.03L (sem recuperação experimental da Rev.03N).
+Interface/Catálogo: Rev.03M (T6613 no catálogo; YF-S201 recolhido, somente GPIO editável).
+Firmware embarcado: Rev.03K.
+Manifest PRESERVAR: sem merged.bin e new_install_prompt_erase=false.
+Identificação visível: Installer Rev.03O | Firmware Rev.03K.
+
+Teste-alvo: atualizar equipamento funcional usando somente ATUALIZAR — PRESERVAR DADOS, sem DO ZERO prévio.

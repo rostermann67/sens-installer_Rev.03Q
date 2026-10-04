@@ -1,0 +1,12 @@
+SENS INSTALLER NEXT — T8100 Rev.01B
+15/09/2026 — P0 LAB
+
+Alterações desta revisão:
+- Firmware NEXT T8100 Rev.01B compilado pelo usuário integrado ao Installer.
+- Telaire T8100 deixa de forçar o papel REFERENCIA.
+- Papel do equipamento passa a ser independente do sensor: NORMAL, AFERIR ou REFERENCIA.
+- Ao selecionar T8100, permanece o perfil de aquisição ADS1115 / AIN0 / GAIN_ONE / sem divisor / média móvel 10.
+- Conversão T8100: 0–4 V = 0–2000 ppm CO2.
+- Firmware Rev.01B inclui diagnóstico explícito da leitura ADS1115 para o teste de bancada.
+
+LINHAGEM NEXT EXPERIMENTAL. NÃO SUBSTITUI O FINAL KIT ESTÁVEL.

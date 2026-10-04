@@ -1,0 +1,8 @@
+SENS INSTALLER NEXT — AQUISIÇÃO Rev.02H
+
+Base: Rev.02G PAPEL TRANSPORTE já validada.
+Alteração desta revisão: entrega de CO2 corrigido à Platform, preservando PAPEL no transporte.
+
+Identificação visual da página: Rev.02H.
+Linhagem: EXPERIMENTAL / NEXT.
+Não substitui o SENS INSTALLER estável.

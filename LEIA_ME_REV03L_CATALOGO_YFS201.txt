@@ -1,0 +1,10 @@
+SENS INSTALLER NEXT Rev.03L — CATÁLOGO + YF-S201
+
+- Base visual: Rev.03K aprovada.
+- Catálogo continua aberto; demais grupos continuam recolhidos no F5.
+- Adiciona YF-S201 ao Catálogo.
+- YF-S201 usa internamente o slot genérico 1 com interface 24 (PULSO/FREQUÊNCIA).
+- GPIO padrão sugerido: 23, configurável pelo pesquisador.
+- Perfil: 450 pulsos/L, janela 1000 ms, factor=60, saída científica vazao em L/min.
+- Os parâmetros podem ser ajustados para o sensor físico.
+- Não altera os binários embarcados neste ZIP; para testar o novo driver é necessário compilar a fonte Rev.03K PULSO/CATÁLOGO e substituir os binários/manifests conforme o fluxo já usado no projeto.

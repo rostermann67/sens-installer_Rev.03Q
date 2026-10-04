@@ -1,0 +1,30 @@
+{
+  "name": "SENS NEXT — PRESERVAR — Firmware Rev.03K",
+  "version": "NEXT-UNIVERSAL Rev.03K",
+  "new_install_prompt_erase": false,
+  "builds": [
+    {
+      "chipFamily": "ESP32",
+      "parts": [
+        {
+          "path": "firmware/SENS_NEXT_UNIVERSAL_REV03K_BOOTLOADER.bin",
+          "offset": 4096
+        },
+        {
+          "path": "firmware/SENS_NEXT_UNIVERSAL_REV03K_PARTITIONS.bin",
+          "offset": 32768
+        },
+        {
+          "path": "firmware/SENS_NEXT_UNIVERSAL_REV03K_BOOT_APP0.bin",
+          "offset": 57344
+        },
+        {
+          "path": "firmware/SENS_NEXT_UNIVERSAL_REV03K_APP.bin",
+          "offset": 65536
+        }
+      ],
+      "improv": true
+    }
+  ],
+  "new_install_improv_wait_time": 0
+}

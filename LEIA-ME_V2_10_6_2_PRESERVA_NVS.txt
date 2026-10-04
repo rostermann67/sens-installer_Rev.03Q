@@ -1,0 +1,34 @@
+SENS INSTALLER V2.10.6.2 — REV15D2.3 — PRESERVAÇÃO REAL DE IDENTIDADE
+
+CAUSA ENCONTRADA
+O firmware anuncia via Improv:
+  firmware name = "SENS Platform"
+
+O manifesto antigo de PRESERVAR anunciava outro nome:
+  "SENS Rev.15D2.3 URL Platform - Atualizar preservando dados"
+
+Além disso, o build estava marcado improv=false.
+
+No ESP Web Tools, quando o firmware atual não é reconhecido como o mesmo produto,
+a operação é tratada como NOVA INSTALAÇÃO; por padrão, nova instalação apaga os
+dados da flash antes de gravar. Isso apagava a NVS sens-seq, causando:
+  - novo Epoch;
+  - Seq voltando para 1.
+
+CORREÇÃO
+- Manifesto PRESERVAR usa name="SENS Platform", exatamente como o firmware informa.
+- build improv=true, permitindo reconhecimento do firmware existente.
+- new_install_prompt_erase=true: se a operação cair excepcionalmente em "nova instalação",
+  o usuário recebe a escolha e deve manter os dados.
+- Manifesto DO ZERO continua separado e destrutivo.
+- Retry curto (até 3 leituras) na confirmação atômica de Nome + Serial.
+
+REGRA FINAL
+ATUALIZAR — PRESERVAR DADOS:
+  mesmo equipamento -> mesma NVS -> mesmo Epoch -> próximo Seq.
+
+INSTALAR SENS DO ZERO:
+  apaga dados -> novo Epoch -> Seq 1.
+
+RESET_DEVICE_IDENTITY:
+  permanece 0 no firmware normal e continua reservado para reutilização deliberada da placa.

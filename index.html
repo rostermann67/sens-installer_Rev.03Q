@@ -1,0 +1,1068 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SENS Installer NEXT — AQUISIÇÃO Rev.02H</title>
+<script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
+<style>
+:root{font-family:Arial,sans-serif;color:#152019;background:#f4f6f5}
+*{box-sizing:border-box}body{margin:0}header{background:#123f22;color:#fff;padding:24px;text-align:center}
+header h1{margin:0 0 5px}main{max-width:880px;margin:24px auto;padding:0 18px}
+.card{background:#fff;border:1px solid #d1d8d3;border-radius:15px;padding:22px;margin:16px 0}
+.step{font-size:.8rem;letter-spacing:.08em;font-weight:700;color:#1b6137}h2{margin:5px 0 14px}
+label{display:block;font-weight:700;margin:13px 0 6px}
+input,select{width:100%;padding:12px;border:1px solid #9ca7a0;border-radius:8px;font-size:1rem;background:#fff}
+button{padding:12px 17px;border:0;border-radius:9px;background:#1b6b3d;color:#fff;font-weight:700;cursor:pointer}
+button:disabled{opacity:.45;cursor:not-allowed}.actions{display:flex;gap:12px;flex-wrap:wrap}
+.note{font-size:.94rem;line-height:1.45;color:#46534b}.status{margin-top:12px;padding:12px;border-radius:8px;background:#eef1ef;white-space:pre-wrap}
+.ok{background:#e7f5eb}.warn{background:#fff6d9}.err{background:#fdeaea}.hidden{display:none}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:650px){.grid{grid-template-columns:1fr}}
+
+footer{text-align:center;color:#626b65;padding:24px}
+.config-table{width:100%;border-collapse:collapse;margin-top:10px}
+.config-table th,.config-table td{border-bottom:1px solid #dfe5e1;padding:9px 8px;text-align:left;vertical-align:top}
+.config-table th{width:34%;color:#284a35;font-weight:700}
+.pill{display:inline-block;padding:3px 8px;border-radius:999px;background:#eef3ef;font-size:.86rem}
+.monitor{background:#111;color:#e9f4ec;border-radius:10px;padding:13px;min-height:270px;max-height:430px;overflow:auto;
+font-family:Consolas,"Courier New",monospace;font-size:.84rem;line-height:1.35;white-space:pre-wrap;word-break:break-word}
+.monitor-placeholder{color:#9ca7a0}
+
+.config-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 16px}
+.config-group{border:1px solid #d7dfda;border-radius:10px;padding:14px;margin-top:14px}
+.config-group legend{font-weight:800;color:#176b3a;padding:0 7px}
+.checkgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px 12px;margin-top:8px}
+.checkitem{display:flex;gap:8px;align-items:center;border:1px solid #e1e7e3;border-radius:8px;padding:8px;background:#fafcfb}
+.catalog-item{min-height:54px;align-items:center}.catalog-text{display:flex;flex:1;min-width:0;flex-direction:column;align-items:flex-end;justify-content:center;line-height:1.08;text-align:right}.catalog-model{font-weight:700;white-space:nowrap}.catalog-qty{font-size:10px;font-weight:600;color:#5f6963;margin-top:4px;white-space:nowrap}
+.smallnote{font-size:.84rem;color:#67716b}
+@media(max-width:760px){.config-grid,.checkgrid{grid-template-columns:1fr}}
+.sensorbox{border:1px solid #dfe7e2;border-radius:10px;padding:12px;margin:10px 0;background:#fcfdfc}
+details.config-group>summary{font-weight:800;color:#176b3a;cursor:pointer}
+.pinmap{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px 14px}
+.warn{background:#fff6dd;border:1px solid #e9c96d;border-radius:8px;padding:9px;margin-top:10px}
+@media(max-width:800px){.pinmap{grid-template-columns:1fr}}
+
+.password-wrap{display:flex;gap:8px;align-items:center}
+.password-wrap input{flex:1}
+.eye-btn{width:46px;min-width:46px;padding:10px 8px;font-size:1.05rem;line-height:1}
+
+</style>
+</head>
+<body>
+<header><h1>SENS INSTALLER NEXT — UNIVERSAL Rev.03Q — PREPARAÇÃO ADS1115 + UART GENÉRICA</h1><div>LAB • INTERFACES / DRIVERS • CONVERSORES • Installer Rev.03Q • Firmware Rev.03K</div></header>
+<main>
+<section class="card" id="preconfigCard">
+<div class="step">ETAPA 1 — CONFIGURAÇÃO DO EQUIPAMENTO</div><h2>Configure o SENS antes de instalar</h2>
+<p class="note">Os campos abaixo serão gravados na NVS do ESP32 após a instalação. A Rev.15D2.3 recebe a configuração completa em uma transação lógica, persiste somente no COMMIT e confirma pela releitura da própria NVS.</p>
+<fieldset class="config-group"><legend>Identificação e operação</legend><div class="config-grid">
+<label>Nome do equipamento<input id="name" placeholder="Ex.: Estação Norte"></label>
+<label>Serial / ID SENS<input id="serial" placeholder="Ex.: SENS-006"></label>
+<label>Projeto<input id="project" placeholder="Ex.: Projeto Ambiental"></label>
+<label>Local<input id="location" placeholder="Ex.: Área experimental 1"></label>
+<label>URL da SENS Platform<input id="platformUrl" type="url" placeholder="https://script.google.com/macros/s/.../exec"></label>
+<label>Papel<select id="role"><option value="NORMAL">NORMAL</option><option value="AFERIR">AFERIR</option><option value="REFERENCIA">REFERÊNCIA</option></select></label>
+<label>Intervalo de envio<select id="sendSec"><option value="60">1 minuto</option><option value="300">5 minutos</option><option value="600">10 minutos</option><option value="900">15 minutos</option><option value="1800">30 minutos</option></select></label>
+</div><label class="checkitem" style="margin-top:10px"><input type="checkbox" id="syncPlatform" checked> Sincronizar intervalo com a SENS Platform</label></fieldset>
+<fieldset class="config-group"><legend>CATÁLOGO — sensores de configuração rápida</legend><div class="checkgrid">
+<label class="checkitem catalog-item"><input type="checkbox" id="s_dht22" checked><span class="catalog-text"><span class="catalog-model">DHT22</span><span class="catalog-qty">Temperatura • Umidade</span></span></label>
+<label class="checkitem catalog-item"><input type="checkbox" id="s_bmp180"><span class="catalog-text"><span class="catalog-model">BMP180</span><span class="catalog-qty">Temperatura • Pressão</span></span></label>
+<label class="checkitem catalog-item"><input type="checkbox" id="s_bme280"><span class="catalog-text"><span class="catalog-model">BME280</span><span class="catalog-qty">Temperatura • Umidade • Pressão</span></span></label>
+<label class="checkitem catalog-item"><input type="checkbox" id="s_bme680"><span class="catalog-text"><span class="catalog-model">BME680</span><span class="catalog-qty">Temperatura • Umidade • Pressão • Gás</span></span></label>
+<label class="checkitem catalog-item"><input type="checkbox" id="s_bmp388"><span class="catalog-text"><span class="catalog-model">BMP388</span><span class="catalog-qty">Temperatura • Pressão</span></span></label>
+<label class="checkitem catalog-item"><input type="checkbox" id="s_bh1750"><span class="catalog-text"><span class="catalog-model">BH1750</span><span class="catalog-qty">Iluminância</span></span></label>
+<label class="checkitem catalog-item"><input type="checkbox" id="s_apds"><span class="catalog-text"><span class="catalog-model">APDS9960</span><span class="catalog-qty">Luz • Proximidade</span></span></label>
+<label class="checkitem catalog-item"><input type="checkbox" id="s_thermok"><span class="catalog-text"><span class="catalog-model">Termopar K</span><span class="catalog-qty">Temperatura</span></span></label>
+<label class="checkitem catalog-item"><input type="checkbox" id="s_gps"><span class="catalog-text"><span class="catalog-model">GPS</span><span class="catalog-qty">Posição</span></span></label>
+<label class="checkitem catalog-item"><input type="checkbox" id="s_t6613"><span class="catalog-text"><span class="catalog-model">T6613</span><span class="catalog-qty">CO₂</span></span></label>
+<label class="checkitem catalog-item"><input type="checkbox" id="s_yfs201"><span class="catalog-text"><span class="catalog-model">YF-S201</span><span class="catalog-qty">Vazão</span></span></label>
+<label class="catalog-item" style="display:flex;flex-direction:column;align-items:stretch;justify-content:center;gap:5px;padding:9px 12px"><span class="catalog-text"><span class="catalog-model">DS18B20</span><span class="catalog-qty">Temperatura</span></span><select id="dsMode" style="width:100%"><option value="0">DESATIVADO</option><option value="1">1 sensor</option><option value="2">2 sensores</option><option value="3">AUTO</option></select></label>
+</div>
+<div id="yf_cfg" class="sensorbox" style="display:none;margin-top:12px">
+  <div class="config-grid"><label>GPIO de pulsos<input id="yf_gpio" type="number" min="0" max="39" value="23"></label></div>
+  <input id="yf_ppu" type="hidden" value="450"><input id="yf_pwin" type="hidden" value="1000">
+  <div class="smallnote">Perfil do catálogo: 450 pulsos/L • janela 1000 ms • saída Vazão — L/min. Somente o GPIO é configurável.</div>
+</div>
+<div class="smallnote">Catálogo = conveniência. Instrumentos fora do catálogo entram por INTERFACE / DRIVER ou CONVERSOR.</div></fieldset>
+
+<details class="config-group"><summary>INTERFACES / DRIVERS</summary>
+  <details class="config-group" style="margin-top:12px"><summary>UART</summary>
+    <div style="margin-top:12px">
+      <b>UART GENÉRICA — preparação</b>
+      <div class="smallnote" style="margin-top:8px"><b>Firmware Rev.03K:</b> o T6613 continua funcional pelo driver UART consolidado. Os campos abaixo preparam/documentam uma futura UART genérica, mas ainda não ativam leitura científica de protocolos arbitrários no firmware.</div>
+      <div class="config-grid" style="margin-top:12px">
+        <label>Instrumento / modelo<input id="uart_model" placeholder="Ex.: analisador CH4"></label>
+        <label>Grandeza<input id="uart_qty" placeholder="Ex.: methane"></label>
+        <label>Unidade<input id="uart_unit" placeholder="Ex.: ppm"></label>
+        <label>RX GPIO<input id="uart_rx" type="number" min="0" max="39" value="16"></label>
+        <label>TX GPIO<input id="uart_tx" type="number" min="0" max="39" value="17"></label>
+        <label>Baud rate<input id="uart_baud" type="number" value="19200"></label>
+        <label>Protocolo / driver<input id="uart_proto" placeholder="Ex.: MODBUS RTU / ASCII / binário"></label>
+      </div>
+    </div>
+  </details>
+</details>
+
+<details class="config-group"><summary>CONVERSORES</summary>
+  <details class="config-group" style="margin-top:12px"><summary>ADC-I²C / ADS1115</summary>
+    <label class="checkitem" style="margin-top:12px"><input type="checkbox" id="s_converter"> <b>ATIVAR CONVERSOR ADS1115</b></label>
+    <div class="warn" style="margin-top:10px"><b>Firmware Rev.03K:</b> ADS1115 já é operacional para CO₂/ppm. Outras grandezas podem ser selecionadas abaixo para preparar/documentar a configuração, mas só passam a ser saída científica quando o firmware ganhar o mapeamento genérico correspondente.</div>
+    <div class="config-grid" style="margin-top:12px">
+      <label>Instrumento / modelo<input id="conv_model" placeholder="Ex.: Telaire T8100 (metadado)"></label>
+      <label>Grandeza<select id="conv_qty"><option value="co2">CO₂</option><option value="temperature">Temperatura</option><option value="humidity">Umidade</option><option value="pressure">Pressão</option><option value="methane">CH₄ / Metano</option><option value="n2o">N₂O</option><option value="flow">Vazão</option><option value="custom">Outra / personalizada</option></select></label>
+      <label>Unidade<input id="conv_unit" value="ppm" placeholder="Ex.: ppm, °C, %RH, hPa"></label>
+      <label>Conversor<select id="aif"><option value="2">ADS1115</option></select></label>
+      <label>Canal ADS1115<select id="adsch"><option value="0">AIN0</option><option value="1" selected>AIN1</option><option value="2">AIN2</option><option value="3">AIN3</option></select></label>
+      <label>Entrada mínima (V)<input id="vin0" type="number" step="any" value="0"></label>
+      <label>Entrada máxima (V)<input id="vin1" type="number" step="any" value="4"></label>
+      <label>Escala mínima (ppm)<input id="sc0" type="number" step="any" value="0"></label>
+      <label>Escala máxima (ppm)<input id="sc1" type="number" step="any" value="2000"></label>
+      <label>Divisor<select id="divider"><option value="0">SEM DIVISOR</option><option value="1">COM DIVISOR</option></select></label>
+      <label>Fator divisor<input id="divratio" type="number" step="any" value="1"></label>
+      <label>Média móvel<select id="mavg"><option value="1">ATIVA</option><option value="0">DESATIVADA</option></select></label>
+      <label>Janela<input id="mwin" type="number" min="1" max="60" value="10"></label>
+      <label>Warm-up<select id="warm"><option value="1">INSTANTÂNEO</option><option value="0">MÉDIA PARCIAL</option></select></label>
+      <select id="tmode" style="display:none"><option value="1" selected>ANALÓGICO</option><option value="2">UART</option><option value="3">AMBOS</option></select>
+    </div>
+    <div id="convCompat" class="smallnote" style="margin-top:8px;font-weight:700">OPERACIONAL NO FW03K — saída científica CO₂/ppm.</div>
+  </details>
+</details>
+<details class="config-group"><summary>Intervalos de leitura</summary><div class="config-grid" style="margin-top:12px">
+<label>DHT22 ms<input id="i_dht" value="5000"></label><label>DS18B20 ms<input id="i_ds" value="5000"></label><label>T6613 ms<input id="i_t66" value="5000"></label>
+<label>BMP180 ms<input id="i_b18" value="5000"></label><label>BME280 ms<input id="i_be2" value="5000"></label><label>BME680 ms<input id="i_be6" value="5000"></label>
+<label>BMP388 ms<input id="i_b38" value="5000"></label><label>BH1750 ms<input id="i_bh" value="5000"></label><label>APDS9960 ms<input id="i_ap" value="5000"></label>
+<label>Termopar K ms<input id="i_th" value="2000"></label><label>GPS ms<input id="i_gps" value="1000"></label></div></details>
+<details class="config-group"><summary>Mapa de pinos / recursos</summary><div class="pinmap" style="margin-top:12px">
+<div><b>GPIO4</b> DHT22</div><div><b>GPIO13</b> DS18B20</div><div><b>GPIO35</b> T6613 ADC</div><div><b>GPIO16/17</b> T6613 UART</div>
+<div><b>GPIO21/22</b> I²C compartilhado</div><div><b>GPIO18/5/19</b> MAX6675</div><div><b id="yfPinMap">GPIO23</b> YF-S201 (quando ativo)</div><div><b>0x48</b> ADS1115</div><div><b>0x23</b> BH1750</div><div><b>0x39</b> APDS9960</div></div>
+<div id="pinWarnings" class="warn">Mapa ativo. Conflitos de GPIO dos genéricos serão sinalizados.</div></details>
+<details class="config-group" style="display:none"><summary>Compatibilidade interna — slots genéricos</summary><p class="smallnote">Quando o slot está DESATIVADO, o Installer confirma somente o estado OFF. Metadados antigos/defaults na NVS não geram falso erro.</p><div id="genericSlots"></div></details>
+<details class="config-group"><summary>Correção metrológica — y = a × x + b</summary><p class="smallnote">2 correções metrológicas disponíveis. Escolha o sensor/canal habilitado e depois a grandeza. Vale para sensores nativos e genéricos. Linhas OFF e vazias são ignoradas.<br><b>Separador decimal:</b> use ponto (.) nos coeficientes, por exemplo <b>a = 1.0234</b> e <b>b = -12.5</b>. Não use vírgula.</p><div id="correctionSlots"></div></details>
+<div class="actions"><button id="save">GUARDAR CONFIGURAÇÃO</button><button id="newConfig" type="button">NOVA CONFIGURAÇÃO / LIMPAR CAMPOS</button></div><div id="saved" class="status">Preencha e guarde a configuração antes da instalação.</div>
+</section>
+
+<section class="card">
+<div class="step">ETAPA 2 — INSTALAÇÃO</div><h2>Instale o SENS</h2>
+<p class="note">O Wi‑Fi automático do ESP Web Tools está desativado nesta versão. Terminada a instalação, use a Etapa 3: ela grava automaticamente o Nome + Serial já salvos e, na mesma conexão USB, segue para a rede.</p>
+<div class="actions">
+<esp-web-install-button manifest="manifest-next-rev03k-do-zero.json"><button slot="activate">INSTALAR SENS DO ZERO</button></esp-web-install-button>
+<esp-web-install-button manifest="manifest-next-rev03k-preservar.json"><button slot="activate">ATUALIZAR — PRESERVAR DADOS</button></esp-web-install-button>
+<div style="margin-top:8px;font-size:.88rem;line-height:1.35">
+  <strong>ATUALIZAR — PRESERVAR DADOS:</strong> mantém NVS/identidade do equipamento
+  (Epoch, próximo Seq e configurações). Se o gravador apresentar uma opção de apagar
+  dados, escolha <strong>NÃO APAGAR / manter dados</strong>.
+</div>
+</div>
+</section>
+
+<section class="card">
+<div class="step">ETAPA 3 — GRAVAR CONFIGURAÇÃO SENS</div><h2>Envie a configuração salva ao ESP32</h2>
+<p class="note">Depois de instalar, clique uma vez abaixo e selecione a porta do ESP32. O Installer grava Nome + Serial juntos e, na Rev.15D2.3, envia a configuração completa por uma transação atômica: Básico + Avançado + Genérico 1/2 + Correção 1/2. O firmware só confirma após COMMIT, releitura da NVS e snapshot válido.</p>
+<button id="apply">GRAVAR CONFIGURAÇÃO E CONTINUAR</button>
+<div id="cfgstatus" class="status">Aguardando instalação e conexão com o ESP32.</div>
+</section>
+
+<section class="card" id="wifiCard">
+<div class="step">ETAPA 4 — REDE • ÚLTIMA ETAPA</div><h2>Configure o Wi‑Fi</h2>
+<p class="note">A configuração SENS termina completamente na Etapa 3. Para configurar a rede, clique em PREPARAR WI‑FI, selecione novamente a porta do ESP32 e então escolha uma rede detectada ou digite o SSID manualmente.</p>
+<label>Rede Wi‑Fi</label><select id="ssid"><option value="">Aguardando preparação da rede...</option></select>
+<label>SSID manual (se necessário)</label><input id="manual" placeholder="Digite apenas se a rede não aparecer acima">
+<label>Senha</label>
+<div class="password-wrap">
+  <input id="password" type="password" placeholder="Senha da rede">
+  <button id="togglePassword" type="button" class="eye-btn" aria-label="Mostrar senha" title="Mostrar/ocultar senha">👁</button>
+</div>
+<div class="actions" style="margin-top:14px"><button id="wifiStart" disabled>PREPARAR WI‑FI</button><button id="connect" disabled>CONECTAR E FINALIZAR</button><button id="rescan" disabled>ATUALIZAR REDES</button></div>
+<div id="wstatus" class="status">Conclua a Etapa 3 antes de configurar o Wi‑Fi.</div>
+</section>
+
+<section class="card" id="configCard">
+<div class="step">CONFIGURAÇÃO GRAVADA NO EQUIPAMENTO</div><h2>Leitura da configuração runtime</h2>
+<p class="note">Espelho da configuração enviada e confirmada pela transação atômica da Rev.15D2.3. O COMMIT valida todos os blocos e gera um snapshot persistente relido da NVS. A senha Wi‑Fi nunca é exibida.</p>
+<table class="config-table"><tr><th>Firmware</th><td>SENS NEXT Universal Rev.03K (fonte catálogo/pulso)</td></tr><tr><th>Nome</th><td id="cfgName">Aguardando</td></tr><tr><th>Serial / ID SENS</th><td id="cfgSerial">Aguardando</td></tr><tr><th>Projeto</th><td id="cfgProject">Aguardando</td></tr><tr><th>Local</th><td id="cfgLocation">Aguardando</td></tr><tr><th>URL da Platform</th><td id="cfgPlatformUrl">Aguardando</td></tr><tr><th>Papel</th><td id="cfgRole">Aguardando</td></tr><tr><th>Intervalo</th><td id="cfgSend">Aguardando</td></tr><tr><th>Sync Platform</th><td id="cfgSync">Aguardando</td></tr><tr><th>Sensores</th><td id="cfgSensors">Aguardando leitura</td></tr><tr><th>Avançado</th><td id="cfgAdvanced">Aguardando leitura</td></tr><tr><th>Genérico 1</th><td id="cfgGeneric1">Aguardando leitura</td></tr><tr><th>Genérico 2</th><td id="cfgGeneric2">Aguardando leitura</td></tr><tr><th>Correção 1</th><td id="cfgCorrection1">Aguardando leitura</td></tr><tr><th>Correção 2</th><td id="cfgCorrection2">Aguardando leitura</td></tr><tr><th>Transação Rev.15D2.3</th><td id="cfgTransaction">Aguardando COMMIT</td></tr><tr><th>Fingerprint</th><td id="cfgFingerprint">—</td></tr><tr><th>Fonte da identidade</th><td id="cfgIdentitySource">Aguardando confirmação</td></tr><tr><th>Wi‑Fi</th><td id="cfgWifi">Não configurado nesta sessão</td></tr><tr><th>Senha Wi‑Fi</th><td><span class="pill">não exibida</span></td></tr></table>
+<div id="cfgPanelStatus" class="status">O painel será atualizado conforme Nome, Serial e Wi‑Fi forem confirmados.</div>
+</section>
+
+<section class="card hidden" id="monitorCard">
+<div class="step">ETAPA 5 — MONITOR SENS</div><h2>Console serial do equipamento</h2>
+<p class="note">Liberado após o equipamento ficar operacional. O monitor usa Web Serial a 115200 bps. Apenas uma sessão pode usar a porta USB por vez.</p>
+<div class="actions">
+<button id="monitorOpen">ABRIR MONITOR</button>
+<button id="monitorClose" disabled>DESCONECTAR</button>
+<button id="monitorClear">LIMPAR</button>
+</div>
+<div id="monitorStatus" class="status">Monitor liberado. Clique em ABRIR MONITOR quando quiser diagnosticar o SENS.</div>
+<div id="monitor" class="monitor"><span class="monitor-placeholder">Aguardando conexão com o ESP32...</span></div>
+</section>
+</main><footer>SENS Platform • SENS Installer</footer>
+
+<script type="module">
+import {SensImprov} from './sens-improv.js';
+
+const $=id=>document.getElementById(id);
+let improv=null, port=null;
+let monitorPort=null, monitorReader=null, monitorRunning=false;
+
+
+class SensConfigSerial15B {
+  constructor(port, log=()=>{}){
+    this.port=port; this.log=log; this.reader=null; this.writer=null;
+    this.running=false; this.buf=""; this.waiter=null;
+  }
+  async open(){
+    await this.port.open({baudRate:115200});
+    try{await this.port.setSignals({dataTerminalReady:false,requestToSend:false});}catch(_){ }
+    this.reader=this.port.readable.getReader();
+    this.writer=this.port.writable.getWriter();
+    this.running=true; this.readLoop();
+    // Reabertura USB pode reiniciar o ESP32; uma espera única, não uma repetição de gravação.
+    await new Promise(r=>setTimeout(r,2200));
+  }
+  async close(){
+    this.running=false;
+    try{await this.reader?.cancel();}catch(_){ }
+    try{this.reader?.releaseLock();}catch(_){ }
+    try{this.writer?.releaseLock();}catch(_){ }
+    try{await this.port.close();}catch(_){ }
+    this.reader=null; this.writer=null;
+  }
+  async readLoop(){
+    const dec=new TextDecoder();
+    try{
+      while(this.running){
+        const {value,done}=await this.reader.read(); if(done)break;
+        if(!value)continue;
+        this.buf += dec.decode(value,{stream:true});
+        let n;
+        while((n=this.buf.indexOf("\n"))>=0){
+          const line=this.buf.slice(0,n).replace(/\r$/,''); this.buf=this.buf.slice(n+1);
+          if(line.startsWith("SENS15D|")) this.onLine(line);
+        }
+      }
+    }catch(e){if(this.running)this.log("Serial 15B encerrada: "+e);}
+  }
+  onLine(line){
+    if(!this.waiter)return;
+    try{this.waiter.onLine(line);}catch(e){this.waiter.reject(e);this.waiter=null;}
+  }
+  async writeLine(line){
+    await this.writer.write(new TextEncoder().encode(line+"\n"));
+  }
+  async expect(line, accept, timeout=7000){
+    if(this.waiter)throw new Error("Comando serial Rev.15D2.2 anterior ainda em andamento.");
+    return await new Promise(async(resolve,reject)=>{
+      const timer=setTimeout(()=>{this.waiter=null;reject(new Error("Tempo esgotado aguardando ACK serial Rev.15D2.3."));},timeout);
+      this.waiter={resolve,reject,onLine:(row)=>{
+        if(row.startsWith("SENS15D|ERR|")){clearTimeout(timer);this.waiter=null;reject(new Error(row));return;}
+        const v=accept(row); if(v!==undefined){clearTimeout(timer);this.waiter=null;resolve(v);}
+      }};
+      try{await this.writeLine(line);}catch(e){clearTimeout(timer);this.waiter=null;reject(e);}
+    });
+  }
+  async begin(token){
+    return await this.expect(`@SENS15D|BEGIN|${token}`, row=>row===`SENS15D|ACK|BEGIN|${token}|READY`?true:undefined);
+  }
+  chunks(text,max=72){
+    const out=[]; let cur=""; const enc=new TextEncoder();
+    for(const ch of String(text??"")){
+      const next=cur+ch;
+      if(cur && enc.encode(next).length>max){out.push(cur);cur=ch;} else cur=next;
+    }
+    if(cur||!out.length)out.push(cur); return out;
+  }
+  async section(tag,text){
+    const chunks=this.chunks(text,72);
+    for(let i=0;i<chunks.length;i++){
+      const last=i===chunks.length-1?1:0;
+      await this.expect(`@SENS15D|${tag}|${i}|${last}|${chunks[i]}`,
+        row=>row===`SENS15D|ACK|${tag}|${i}|${last}`?true:undefined);
+    }
+  }
+  async commit(){
+    if(this.waiter)throw new Error("Comando serial Rev.15D2.2 anterior ainda em andamento.");
+    return await new Promise(async(resolve,reject)=>{
+      const rows=[];
+      const timer=setTimeout(()=>{this.waiter=null;reject(new Error("Tempo esgotado no COMMIT Rev.15D2.3."));},26000);
+      this.waiter={resolve,reject,onLine:(row)=>{
+        if(row.startsWith("SENS15D|ERR|")){clearTimeout(timer);this.waiter=null;reject(new Error(row));return;}
+        rows.push(row);
+        if(row==="SENS15D|END"){clearTimeout(timer);this.waiter=null;resolve(rows);}
+      }};
+      try{await this.writeLine("@SENS15D|COMMIT");}catch(e){clearTimeout(timer);this.waiter=null;reject(e);}
+    });
+  }
+}
+
+function updateConfigPanel(){
+  const c=getSaved();
+  if(c){
+    $("cfgName").textContent=c.name || "—";
+    $("cfgSerial").textContent=c.serial || "—";
+  }
+}
+function setIdentityConfirmed(name,serial){
+  $("cfgName").textContent=name;
+  $("cfgSerial").textContent=serial;
+  $("cfgIdentitySource").textContent="NVS/WEB — confirmada";
+  setStatus("cfgPanelStatus","✓ Identidade gravada e confirmada no ESP32.","ok");
+}
+function setWifiConfirmed(ssid){
+  $("cfgWifi").textContent=`${ssid} — provisionado`;
+  setStatus("cfgPanelStatus","✓ Identidade confirmada.\n✓ Wi‑Fi provisionado.\n✓ SENS OPERACIONAL.","ok");
+  $("monitorCard").classList.remove("hidden");
+}
+function appendMonitor(text){
+  const box=$("monitor");
+  if(box.querySelector(".monitor-placeholder")) box.textContent="";
+  box.textContent += text;
+  box.scrollTop=box.scrollHeight;
+}
+
+
+function getSaved(){
+  try{return JSON.parse(localStorage.getItem("sensInstallerNEXTCONVERSORREV02")||"null")}catch(e){return null}
+}
+function setStatus(id,text,kind=""){
+  const e=$(id);e.textContent=text;e.className="status "+kind;
+}
+function validSerial(s){return /^[A-Za-z0-9-]+$/.test(s);}
+function buildV28(){
+ let g=$("genericSlots");for(let i=0;i<2;i++){let d=document.createElement("div");d.className="sensorbox";d.innerHTML=`<b>GENÉRICO ${i+1}</b><div class="config-grid">
+<label>Ativo<select id="g${i}_en"><option value="0">NÃO</option><option value="1">SIM</option></select></label><label>ID<input id="g${i}_id" value="G${String(i+1).padStart(2,"0")}"></label>
+<label>Modelo<input id="g${i}_model"></label><label>Fabricante<input id="g${i}_mfr"></label><label>Interface<select id="g${i}_if"><option value="10">ADC ESP32</option><option value="11">ADS1115</option><option value="20">RS485/Modbus</option><option value="21">4–20 mA</option><option value="22">RS232</option><option value="23">0–10 V</option><option value="24">PULSO/FREQUÊNCIA</option></select></label>
+<label>GPIO<input id="g${i}_gpio" value="-1"></label><label>Grandeza<input id="g${i}_qty"></label><label>Unidade<input id="g${i}_unit"></label>
+<label>Entrada mín<input id="g${i}_in0" value="0"></label><label>Entrada máx<input id="g${i}_in1" value="3.3"></label><label>Escala mín<input id="g${i}_sc0" value="0"></label><label>Escala máx<input id="g${i}_sc1" value="100"></label>
+<label>Baud<input id="g${i}_baud" value="9600"></label><label>Slave<input id="g${i}_slave" value="1"></label><label>Register<input id="g${i}_reg" value="0"></label><label>Fator<input id="g${i}_factor" value="1"></label>
+<label>Pulsos/unidade<input id="g${i}_ppu" value="450"></label><label>Janela pulso ms<input id="g${i}_pwin" value="1000"></label><label>Totalizador<select id="g${i}_total"><option value="1">SIM</option><option value="0">NÃO</option></select></label></div>`;g.appendChild(d)}
+ let c=$("correctionSlots");for(let i=0;i<2;i++){let d=document.createElement("div");d.className="sensorbox";d.innerHTML=`<b>CANAL ${i+1}</b><div class="config-grid">
+<label>APLICAR CORREÇÃO<select id="c${i}_en"><option value="0">NÃO</option><option value="1">SIM</option></select></label><label>Sensor / canal<select id="c${i}_sid"><option value="">Selecione um sensor habilitado...</option></select></label><label>Grandeza<select id="c${i}_qty"><option value="">Selecione primeiro o sensor...</option></select></label><label>Ganho (a)<input id="c${i}_a" value="1"></label>
+<label>Offset (b)<input id="c${i}_b" value="0"></label><label>ID da Aferição<input id="c${i}_cid"></label><label>Verificada<select id="c${i}_ver"><option value="0">NÃO</option><option value="1">SIM</option></select></label></div><div class="smallnote" id="c${i}_eq" style="margin-top:10px;font-weight:700">Equação: y = 1 × x + 0</div>`;c.appendChild(d);
+ for(const k of ["en","sid","qty","a","b","cid","ver"]){$("c"+i+"_"+k).addEventListener("input",()=>updateCorrectionPreview(i));$("c"+i+"_"+k).addEventListener("change",()=>updateCorrectionPreview(i));} updateCorrectionPreview(i)}
+ wireCorrectionMenus();
+}
+
+const CORR_NATIVE = {
+  S_DHT22:{label:"DHT22", quantities:["temperature","humidity"]},
+  S_DS1:{label:"DS18B20 — sensor 1", quantities:["temperature"]},
+  S_DS2:{label:"DS18B20 — sensor 2", quantities:["temperature"]},
+  S_BMP180:{label:"BMP180", quantities:["temperature","pressure"]},
+  S_BME280:{label:"BME280", quantities:["temperature","humidity","pressure"]},
+  S_BME680:{label:"BME680", quantities:["temperature","humidity","pressure","gas_resistance"]},
+  S_BMP388:{label:"BMP388", quantities:["temperature","pressure","altitude"]},
+  S_BH1750:{label:"BH1750", quantities:["illuminance"]},
+  S_APDS9960:{label:"APDS9960", quantities:["proximity","red","green","blue","clear"]},
+  S_THK:{label:"Termopar K / MAX6675", quantities:["temperature"]},
+  S_CO2:{label:"T6613", quantities:["co2"]},
+  S_GPS:{label:"GPS", quantities:["latitude","longitude","altitude","satellites","speed","hdop"]}
+};
+const CORR_Q_LABEL = {
+  temperature:"Temperatura",humidity:"Umidade",pressure:"Pressão",gas_resistance:"Resistência do gás",
+  altitude:"Altitude",illuminance:"Iluminância",proximity:"Proximidade",red:"Vermelho",green:"Verde",
+  blue:"Azul",clear:"Clear",co2:"CO₂",latitude:"Latitude",longitude:"Longitude",satellites:"Satélites",
+  speed:"Velocidade",hdop:"HDOP"
+};
+function enabledCorrectionSensors(){
+  const a=[];
+  const add=(ok,id)=>{if(ok && CORR_NATIVE[id])a.push({id,label:CORR_NATIVE[id].label,quantities:[...CORR_NATIVE[id].quantities]})};
+  add($("s_dht22").checked,"S_DHT22");
+  const dm=parseInt($("dsMode").value||"0",10);
+  add(dm>=1,"S_DS1"); add(dm>=2,"S_DS2");
+  add($("s_bmp180").checked,"S_BMP180"); add($("s_bme280").checked,"S_BME280");
+  add($("s_bme680").checked,"S_BME680"); add($("s_bmp388").checked,"S_BMP388");
+  add($("s_bh1750").checked,"S_BH1750"); add($("s_apds").checked,"S_APDS9960");
+  add($("s_thermok").checked,"S_THK");
+  if($("s_converter")?.checked)a.push({id:"S_CO2",label:`CONVERSOR ADS1115${$("conv_model")?.value.trim()?" — "+$("conv_model").value.trim():""}`,quantities:["co2"]});
+  else add($("s_t6613").checked,"S_CO2");
+  add($("s_gps").checked,"S_GPS");
+  for(let i=0;i<2;i++){
+    if($("g"+i+"_en")?.value==="1"){
+      const id=$("g"+i+"_id")?.value.trim(), qty=$("g"+i+"_qty")?.value.trim();
+      if(id)a.push({id,label:`${id} — ${$("g"+i+"_model")?.value.trim()||"Genérico "+(i+1)}`,quantities:qty?[qty]:[]});
+    }
+  }
+  return a;
+}
+function refreshCorrectionMenus(){
+  const sensors=enabledCorrectionSensors();
+  for(let i=0;i<2;i++){
+    const sid=$("c"+i+"_sid"), qty=$("c"+i+"_qty"); if(!sid||!qty)continue;
+    const oldSid=sid.value, oldQty=qty.value;
+    sid.innerHTML='<option value="">Selecione um sensor habilitado...</option>';
+    for(const s of sensors){const o=document.createElement("option");o.value=s.id;o.textContent=`${s.label}  [${s.id}]`;sid.appendChild(o)}
+    if([...sid.options].some(o=>o.value===oldSid))sid.value=oldSid;
+    else if(oldSid){const o=document.createElement("option");o.value=oldSid;o.textContent=`${oldSid} [configuração anterior]`;sid.appendChild(o);sid.value=oldSid}
+    refreshCorrectionQuantities(i,oldQty);
+  }
+}
+function refreshCorrectionQuantities(i,preferred=""){
+  const sid=$("c"+i+"_sid"), qty=$("c"+i+"_qty"); if(!sid||!qty)return;
+  const old=preferred||qty.value;
+  const s=enabledCorrectionSensors().find(x=>x.id===sid.value);
+  let qs=s?.quantities||[];
+  qty.innerHTML='<option value="">Selecione a grandeza...</option>';
+  for(const q of qs){const o=document.createElement("option");o.value=q;o.textContent=`${CORR_Q_LABEL[q]||q}  [${q}]`;qty.appendChild(o)}
+  if([...qty.options].some(o=>o.value===old))qty.value=old;
+  else if(old){const o=document.createElement("option");o.value=old;o.textContent=`${CORR_Q_LABEL[old]||old} [configuração anterior]`;qty.appendChild(o);qty.value=old}
+  updateCorrectionPreview(i);
+}
+function wireCorrectionMenus(){
+  const ids=["s_dht22","s_t6613","s_converter","s_bmp180","s_bme280","s_bme680","s_bmp388","s_bh1750","s_apds","s_thermok","s_gps","dsMode"];
+  for(const id of ids)$(id)?.addEventListener("change",refreshCorrectionMenus);
+  for(let i=0;i<2;i++){
+    $("c"+i+"_sid")?.addEventListener("change",()=>refreshCorrectionQuantities(i));
+    for(const k of ["en","id","model","qty"])$("g"+i+"_"+k)?.addEventListener("input",refreshCorrectionMenus);
+    for(const k of ["en","id","model","qty"])$("g"+i+"_"+k)?.addEventListener("change",refreshCorrectionMenus);
+  }
+  refreshCorrectionMenus();
+}
+
+
+function updateConverterCompatibilityNote(){
+  const q=$("conv_qty")?.value||"co2";
+  const warn=$("convCompat");
+  if(warn) warn.textContent=q==="co2"?"OPERACIONAL NO FW03K — saída científica CO₂/ppm.":"PREPARADO NO INSTALLER — esta grandeza ainda requer suporte no firmware para virar saída científica.";
+}
+
+function applyConverterProfile(){
+  const on=$("s_converter")?.checked;
+  if(!on)return;
+  $("s_t6613").checked=false; // Rev.02 usa o mesmo canal CO2 interno; evita duas fontes simultâneas
+  $("tmode").value="1";
+  $("aif").value="2";
+  $("divider").value=$("divider").value||"0";
+  refreshCorrectionMenus();
+}
+$("s_converter")?.addEventListener("change",applyConverterProfile);
+$("s_t6613")?.addEventListener("change",()=>{if($("s_t6613").checked && $("s_converter")?.checked){$("s_converter").checked=false;refreshCorrectionMenus();}});
+$("conv_model")?.addEventListener("input",refreshCorrectionMenus);
+$("conv_qty")?.addEventListener("change",updateConverterCompatibilityNote);
+updateConverterCompatibilityNote();
+
+function advForm(){const tmode=$("s_t6613")?.checked?2:1;return `tmode=${tmode};aif=${$("aif").value};adsch=${$("adsch").value};vin0=${$("vin0").value};vin1=${$("vin1").value};sc0=${$("sc0").value};sc1=${$("sc1").value};div=${$("divider").value};divr=${$("divratio").value};mavg=${$("mavg").value};mwin=${$("mwin").value};warm=${$("warm").value};i_dht=${$("i_dht").value};i_ds=${$("i_ds").value};i_t66=${$("i_t66").value};i_b18=${$("i_b18").value};i_be2=${$("i_be2").value};i_be6=${$("i_be6").value};i_b38=${$("i_b38").value};i_bh=${$("i_bh").value};i_ap=${$("i_ap").value};i_th=${$("i_th").value};i_gps=${$("i_gps").value}`}
+function genForm(i){return `en=${$("g"+i+"_en").value};id=${$("g"+i+"_id").value};model=${$("g"+i+"_model").value};mfr=${$("g"+i+"_mfr").value};if=${$("g"+i+"_if").value};qty=${$("g"+i+"_qty").value};unit=${$("g"+i+"_unit").value};gpio=${$("g"+i+"_gpio").value};in0=${$("g"+i+"_in0").value};in1=${$("g"+i+"_in1").value};sc0=${$("g"+i+"_sc0").value};sc1=${$("g"+i+"_sc1").value};baud=${$("g"+i+"_baud").value};slave=${$("g"+i+"_slave").value};reg=${$("g"+i+"_reg").value};factor=${$("g"+i+"_factor").value};ppu=${$("g"+i+"_ppu").value};pwin=${$("g"+i+"_pwin").value};total=${$("g"+i+"_total").value}`}
+function sensDecimal(v,label){
+  const raw=String(v??"").trim();
+  const normalized=raw.replace(/\s+/g,"").replace(",",".");
+  if(!/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)$/.test(normalized))
+    throw new Error(`${label}: valor numérico inválido "${raw}". Use, por exemplo, -135,33249 ou -135.33249.`);
+  const n=Number(normalized);
+  if(!Number.isFinite(n)) throw new Error(`${label}: valor numérico inválido "${raw}".`);
+  return String(n);
+}
+function corForm(i){
+  const a=sensDecimal($("c"+i+"_a").value,`Correção ${i+1} — Ganho (a)`);
+  const b=sensDecimal($("c"+i+"_b").value,`Correção ${i+1} — Offset (b)`);
+  return `en=${$("c"+i+"_en").value};sid=${$("c"+i+"_sid").value};qty=${$("c"+i+"_qty").value};a=${a};b=${b};cid=${$("c"+i+"_cid").value};ver=${$("c"+i+"_ver").value}`
+}
+function updateCorrectionPreview(i){
+  const en=$("c"+i+"_en")?.value==="1", q=$("c"+i+"_qty")?.value.trim()||"y", a=$("c"+i+"_a")?.value||"1", b=$("c"+i+"_b")?.value||"0";
+  const e=$("c"+i+"_eq"); if(e)e.textContent=`${en?"CORREÇÃO ATIVA":"CORREÇÃO DESATIVADA"} — ${q} corrigida = ${a} × valor medido ${Number(b)>=0?"+ ":"− "}${Math.abs(Number(b)||0)}`;
+}
+function correctionNeedsWrite(x){
+  const o=kvObj(x);
+  return String(o.en)==="1" || String(o.sid||"").trim()!=="" ||
+         String(o.qty||"").trim()!=="" || String(o.cid||"").trim()!=="" ||
+         String(o.ver)==="1" || Number(o.a)!==1 || Number(o.b)!==0;
+}
+function genericNeedsWrite(x){
+  const o=kvObj(x);
+  if(String(o.en)==="1")return true;
+  return (o.model||"").trim()!=="" || (o.mfr||"").trim()!=="" ||
+         (o.qty||"").trim()!=="" || (o.unit||"").trim()!=="" ||
+         (o.gpio!==undefined && String(o.gpio)!=="-1");
+}
+function restoreFull(c){
+  if(!c)return;
+  const V=(id,v)=>{if($(id))$(id).value=(v??"")};
+  V("name",c.name||"");V("serial",c.serial||"");V("project",c.project||"");V("location",c.location||"");V("platformUrl",c.platformUrl||"");V("role",c.role||"NORMAL");V("sendSec",c.sendSec||60);$("syncPlatform").checked=c.sync!==false;
+  const z=c.sensors||{};if(z.t8100 && z.converter===undefined){z.converter=true;z.convModel=z.convModel||"Telaire T8100";}for(const [id,k] of [["s_dht22","dht22"],["s_t6613","t6613"],["s_converter","converter"],["s_bmp180","bmp180"],["s_bme280","bme280"],["s_bme680","bme680"],["s_bmp388","bmp388"],["s_bh1750","bh1750"],["s_apds","apds"],["s_thermok","thermok"],["s_gps","gps"]])$(id).checked=!!z[k];V("dsMode",z.dsMode||0);V("conv_model",z.convModel||"");V("conv_qty",z.convQty||"co2");V("conv_unit",z.convUnit||"ppm");V("uart_model",z.uartModel||"");V("uart_qty",z.uartQty||"");V("uart_unit",z.uartUnit||"");V("uart_rx",z.uartRx||"16");V("uart_tx",z.uartTx||"17");V("uart_baud",z.uartBaud||"19200");V("uart_proto",z.uartProto||"");
+  const a=kvObj(c.advanced||"");for(const [k,id] of Object.entries({tmode:"tmode",aif:"aif",adsch:"adsch",vin0:"vin0",vin1:"vin1",sc0:"sc0",sc1:"sc1",div:"divider",divr:"divratio",mavg:"mavg",mwin:"mwin",warm:"warm",i_dht:"i_dht",i_ds:"i_ds",i_t66:"i_t66",i_b18:"i_b18",i_be2:"i_be2",i_be6:"i_be6",i_b38:"i_b38",i_bh:"i_bh",i_ap:"i_ap",i_th:"i_th",i_gps:"i_gps"}))if(k in a)V(id,a[k]);
+  for(let i=0;i<2;i++){const g=kvObj(c.generics?.[i]||"");for(const k of ["en","id","model","mfr","if","gpio","qty","unit","in0","in1","sc0","sc1","baud","slave","reg","factor","ppu","pwin","total"])if(k in g)V(`g${i}_${k}`,g[k]);const q=kvObj(c.corrections?.[i]||"");for(const k of ["sid","qty","a","b","cid","en","ver"])if(k in q)V(`c${i}_${k}`,q[k]);updateCorrectionPreview(i);}syncYFFromSaved(c);
+  refreshCorrectionMenus();
+}
+function clearNewConfig(){localStorage.removeItem("sensInstallerNEXTCONVERSORREV02");location.reload();}
+function fmtKv(x,kind){const o=kvObj(x||"");if(kind==="generic")return String(o.en)!=="1"?"DESATIVADO":`${o.id||"—"} • ${o.model||"—"} • ${o.qty||"—"} ${o.unit||""} • GPIO ${o.gpio||"—"} • fator ${o.factor||"—"}`;if(kind==="corr")return String(o.en)!=="1"?"DESATIVADA":`${o.sid||"—"} • ${o.qty||"—"} • y = ${o.a||1} × x + ${o.b||0} • Aferição ${o.cid||"—"}`;return Object.entries(o).map(([k,v])=>`${k}=${v}`).join(" • ")||"—";}
+function applyYFProfile(){
+  const on=$("s_yfs201")?.checked;
+  if(!$("g0_en")) return;
+  if(on){
+    V("g0_en","1");V("g0_id","S_YF201");V("g0_model","YF-S201");V("g0_mfr","Generico");V("g0_if","24");
+    V("g0_gpio",$("yf_gpio").value||"23");V("g0_qty","vazao");V("g0_unit","L/min");
+    V("g0_factor","60");V("g0_ppu",$("yf_ppu").value||"450");V("g0_pwin",$("yf_pwin").value||"1000");V("g0_total","1");
+  } else {
+    const model=$("g0_model")?.value||"";
+    if(model==="YF-S201" || $("g0_id")?.value==="S_YF201") V("g0_en","0");
+  }
+  if($("yfPinMap")) $("yfPinMap").textContent="GPIO"+($("yf_gpio")?.value||"23");
+}
+function syncYFFromSaved(c){
+  const g=kvObj(c?.generics?.[0]||""); const isYF=String(g.en)==="1" && (g.model==="YF-S201" || g.id==="S_YF201");
+  if($("s_yfs201")) $("s_yfs201").checked=isYF;
+  if(isYF){V("yf_gpio",g.gpio||"23");V("yf_ppu",g.ppu||"450");V("yf_pwin",g.pwin||"1000");}
+  if($("yfPinMap")) $("yfPinMap").textContent="GPIO"+($("yf_gpio")?.value||"23");
+}
+function refreshYFCatalogUI(){
+  const box=$("yf_cfg"); if(box) box.style.display=$("s_yfs201")?.checked?"block":"none";
+}
+$("s_yfs201")?.addEventListener("change",()=>{applyYFProfile();refreshYFCatalogUI();});
+$("yf_gpio")?.addEventListener("input",applyYFProfile);
+
+function saveConfig(){
+  applyConverterProfile();
+  applyYFProfile();
+  const name=$("name").value.trim(),serial=$("serial").value.trim();
+  if(!name||!serial){alert("Preencha Nome e Serial.");return false;}
+  if(!validSerial(serial)){alert("No Serial use apenas letras, números e hífen.");return false;}
+  const c={name,serial,project:$("project").value.trim(),location:$("location").value.trim(),platformUrl:$("platformUrl").value.trim(),
+    role:$("role").value,sendSec:parseInt($("sendSec").value,10),sync:$("syncPlatform").checked,
+    sensors:{dht22:$("s_dht22").checked,t6613:$("s_t6613").checked,converter:$("s_converter").checked,convModel:$("conv_model").value.trim(),convQty:$("conv_qty").value,convUnit:$("conv_unit").value.trim(),uartModel:$("uart_model").value.trim(),uartQty:$("uart_qty").value.trim(),uartUnit:$("uart_unit").value.trim(),uartRx:$("uart_rx").value,uartTx:$("uart_tx").value,uartBaud:$("uart_baud").value,uartProto:$("uart_proto").value.trim(),bmp180:$("s_bmp180").checked,
+    bme280:$("s_bme280").checked,bme680:$("s_bme680").checked,bmp388:$("s_bmp388").checked,
+    bh1750:$("s_bh1750").checked,apds:$("s_apds").checked,thermok:$("s_thermok").checked,
+    gps:$("s_gps").checked,dsMode:parseInt($("dsMode").value,10)}};
+  c.advanced=advForm();c.generics=Array.from({length:2},(_,i)=>genForm(i));c.corrections=Array.from({length:2},(_,i)=>corForm(i));
+  if(!/^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec(?:[?#].*)?$/.test(c.platformUrl)){setStatus("saved","Informe uma URL válida da implantação Web App da SENS Platform (https://script.google.com/macros/s/.../exec).","err");return;}
+  localStorage.setItem("sensInstallerNEXTCONVERSORREV02",JSON.stringify(c));
+  setStatus("saved",`Configuração guardada.\nNome: ${name}\nSerial: ${serial}\nPapel: ${c.role}\nIntervalo: ${c.sendSec}s`,"ok");
+  return true;
+}
+$("save").onclick=saveConfig;
+$("newConfig").onclick=()=>{if(confirm("Limpar a configuração guardada nesta versão e iniciar um novo equipamento?"))clearNewConfig();};
+
+async function startWifiStage(){
+  $("wifiStart").disabled=true;
+  $("connect").disabled=true;
+  $("rescan").disabled=true;
+  setStatus("wstatus","Abrindo a porta serial para a Etapa 4...");
+  try{
+    if(!("serial" in navigator)) throw new Error("Este navegador não oferece Web Serial. Use Chrome ou Edge no computador.");
+    port=await navigator.serial.requestPort();
+    improv=new SensImprov(port,console.log);
+    await improv.open();
+    setStatus("wstatus","ESP32 conectado. Sincronizando o canal Improv...");
+    await new Promise(r=>setTimeout(r,5000));
+    try{
+      await improv.initialize();
+    }catch(initErr){
+      throw new Error("Improv não sincronizado. O ESP32 não confirmou o handshake serial.");
+    }
+    setStatus("wstatus","Improv sincronizado. Buscando redes Wi‑Fi...","ok");
+    $("connect").disabled=false;
+    $("rescan").disabled=false;
+    await scanNetworks();
+  }catch(e){
+    setStatus("wstatus","Não foi possível preparar o Wi‑Fi.\n"+e.message,"err");
+    try{await improv?.close()}catch(_){}
+    improv=null;
+    port=null;
+    $("wifiStart").disabled=false;
+  }
+}
+
+const togglePasswordBtn=$("togglePassword");
+if(togglePasswordBtn){
+  togglePasswordBtn.onclick=()=>{
+    const p=$("password");
+    const mostrar=p.type==="password";
+    p.type=mostrar?"text":"password";
+    togglePasswordBtn.textContent=mostrar?"🙈":"👁";
+    togglePasswordBtn.setAttribute("aria-label",mostrar?"Ocultar senha":"Mostrar senha");
+    togglePasswordBtn.title=mostrar?"Ocultar senha":"Mostrar senha";
+  };
+}
+
+$("wifiStart").onclick=startWifiStage;
+
+async function scanNetworks(){
+  $("rescan").disabled=true; $("connect").disabled=true;
+  setStatus("wstatus","Procurando redes Wi‑Fi...");
+  try{
+    let nets=null, scanErr=null;
+    for(let ciclo=1; ciclo<=2 && nets===null; ciclo++){
+      try{
+        nets=await improv.scanReliable((n,total)=>{
+          setStatus("wstatus",`Procurando redes Wi-Fi... ciclo ${ciclo}/2, tentativa ${n}/${total}`);
+        });
+      }catch(e){
+        scanErr=e;
+        if(ciclo<2){
+          setStatus("wstatus","Primeiro scan não respondeu. Recuperando e tentando novamente automaticamente...");
+          await new Promise(r=>setTimeout(r,3500));
+          try{await improv.waitForState(7000);}catch(_){}
+          await new Promise(r=>setTimeout(r,1800));
+        }
+      }
+    }
+    if(nets===null) throw scanErr || new Error("Tempo esgotado aguardando resposta do ESP32.");
+    const sel=$("ssid"); sel.innerHTML='<option value="">Selecione uma rede...</option>';
+    for(const n of nets){
+      const o=document.createElement("option"); o.value=n.name;
+      o.textContent=`${n.name}  (${n.rssi} dBm${n.secured?", protegida":", aberta"})`; sel.appendChild(o);
+    }
+    setStatus("wstatus", nets.length?`${nets.length} rede(s) encontrada(s). Selecione uma ou use SSID manual.`:"Nenhuma rede listada. Você pode digitar o SSID manualmente.","ok");
+  }catch(e){
+    $("ssid").innerHTML='<option value="">Scan indisponível — use SSID manual</option>';
+    setStatus("wstatus","Não foi possível listar redes. Digite o SSID manualmente.\nDetalhe: "+e.message,"warn");
+  }finally{
+    $("rescan").disabled=false;$("connect").disabled=false;
+  }
+}
+$("rescan").onclick=scanNetworks;
+
+async function reopenImprovSamePort(attempt,total){
+  setStatus("cfgstatus",`ESP32 ainda inicializando. Recuperação automática ${attempt}/${total}...`);
+  try{await improv?.close()}catch(_){}
+  improv=null;
+  await new Promise(r=>setTimeout(r,2200));
+  improv=new SensImprov(port,console.log);
+  await improv.open();
+  await new Promise(r=>setTimeout(r,4200));
+}
+
+function encodeRuntime(c){const s=c.sensors||{},ds=s.dsMode||0;return [`project=${c.project||""}`,`location=${c.location||""}`,`role=${c.role||"NORMAL"}`,`url=${c.platformUrl||""}`,`send=${c.sendSec||60}`,`sync=${c.sync?1:0}`,`dht22=${s.dht22?1:0}`,`ds18=${ds>0?1:0}`,`dsMode=${ds}`,`bmp180=${s.bmp180?1:0}`,`bme280=${s.bme280?1:0}`,`bme680=${s.bme680?1:0}`,`bmp388=${s.bmp388?1:0}`,`bh1750=${s.bh1750?1:0}`,`apds=${s.apds?1:0}`,`thermok=${s.thermok?1:0}`,`t6613=${(s.t6613||s.converter)?1:0}`,`gps=${s.gps?1:0}`].join(";");}
+function parseRuntime(x){const o={};for(const p of (x||"").split(";")){const i=p.indexOf("=");if(i>=0)o[p.slice(0,i)]=p.slice(i+1)}return o}
+function showRuntime(x,name,serial){const r=parseRuntime(x);$("cfgName").textContent=name;$("cfgSerial").textContent=serial;$("cfgProject").textContent=r.project||"—";$("cfgLocation").textContent=r.location||"—";$("cfgPlatformUrl").textContent=r.url||"—";$("cfgRole").textContent=r.role||"—";$("cfgSend").textContent=(r.send||"—")+" s";$("cfgSync").textContent=r.sync==="1"?"SIM":"NÃO";const n=[];if(r.dht22==="1")n.push("DHT22");if(r.t6613==="1"){const sv=getSaved()?.sensors||{};n.push(sv.converter?`CONVERSOR ADS1115${sv.convModel?" — "+sv.convModel:""}`:"T6613 UART");}if(r.ds18==="1")n.push(`DS18B20(modo ${r.dsMode||"0"})`);for(const [k,l] of [["bmp180","BMP180"],["bme280","BME280"],["bme680","BME680"],["bmp388","BMP388"],["bh1750","BH1750"],["apds","APDS9960"],["thermok","Termopar K"],["gps","GPS"]])if(r[k]==="1")n.push(l);$("cfgSensors").textContent=n.length?n.join(" • "):"Nenhum sensor habilitado";}
+
+async function confirmIdentityFast(label,wanted,setter,getter,onProgress){
+  let last="";
+
+  // 1) Tenta gravar uma única vez.
+  if(onProgress) onProgress(`${label}: gravando...`);
+  try{
+    const returned = await setter(wanted);
+    if(returned === wanted){
+      if(onProgress) onProgress(`✓ ${label} gravado e confirmado pelo retorno.`);
+      return wanted;
+    }
+    if(returned) last=`Retorno da gravação: "${returned}"`;
+  }catch(e){
+    last=e.message||String(e);
+  }
+
+  // 2) Se o ACK/retorno se perdeu, fazemos UMA leitura de recuperação.
+  await new Promise(r=>setTimeout(r,900));
+  if(onProgress) onProgress(`${label}: verificando gravação...`);
+  try{
+    const readback = await getter();
+    if(readback === wanted){
+      if(onProgress) onProgress(`✓ ${label} confirmado por leitura.`);
+      return readback;
+    }
+    last=`Leitura retornou "${readback}"`;
+  }catch(e){
+    last=e.message||String(e);
+  }
+
+  // 3) Uma única segunda gravação, sem três ciclos longos.
+  if(onProgress) onProgress(`${label}: segunda e última tentativa...`);
+  try{
+    const returned2 = await setter(wanted);
+    if(returned2 === wanted){
+      if(onProgress) onProgress(`✓ ${label} confirmado na segunda tentativa.`);
+      return wanted;
+    }
+    if(returned2) last=`Retorno final: "${returned2}"`;
+  }catch(e){
+    last=e.message||String(e);
+  }
+
+  // 4) Leitura final única.
+  await new Promise(r=>setTimeout(r,900));
+  try{
+    const finalRead = await getter();
+    if(finalRead === wanted){
+      if(onProgress) onProgress(`✓ ${label} confirmado na leitura final.`);
+      return finalRead;
+    }
+    last=`Leitura final retornou "${finalRead}"`;
+  }catch(e){
+    last=e.message||String(e);
+  }
+
+  throw new Error(`${label} não confirmado. ${last}`);
+}
+
+function configDiff(wanted,readback){
+  const a=kvObj(wanted),b=kvObj(readback),d=[];
+  for(const k of Object.keys(a)){
+    if(!(k in b)){d.push(k+" ausente");continue;}
+    const av=a[k],bv=b[k],an=Number(av),bn=Number(bv);
+    const bothNumeric=av.trim()!==""&&bv.trim()!==""&&Number.isFinite(an)&&Number.isFinite(bn);
+    if(bothNumeric){
+      const tol=Math.max(1e-5,Math.abs(an)*1e-5);
+      if(Math.abs(an-bn)>tol)d.push(`${k}: ${av} ≠ ${bv}`);
+    }else if(av!==bv)d.push(`${k}: "${av}" ≠ "${bv}"`);
+  }
+  return d.slice(0,4).join(" | ");
+}
+async function confirmRuntimeByReadback(wantedEncoded,onProgress){
+  let last="";
+  if(onProgress)onProgress("Runtime básico: gravando...");
+  try{
+    const returned=await improv.sensSetConfig(wantedEncoded);
+    if(equivalentConfig(wantedEncoded,returned))return returned;
+    last=configDiff(wantedEncoded,returned)||"retorno da gravação diferente";
+  }catch(e){last=e.message||String(e);}
+  await new Promise(r=>setTimeout(r,1200));
+  if(onProgress)onProgress("Runtime básico: leitura de recuperação...");
+  try{const x=await improv.sensGetConfig();if(equivalentConfig(wantedEncoded,x))return x;last=configDiff(wantedEncoded,x)||"readback diferente";}catch(e){last=e.message||String(e);}
+  if(onProgress)onProgress("Runtime básico: segunda e última gravação...");
+  try{const returned=await improv.sensSetConfig(wantedEncoded);if(equivalentConfig(wantedEncoded,returned))return returned;last=configDiff(wantedEncoded,returned)||"retorno diferente";}catch(e){last=e.message||String(e);}
+  await new Promise(r=>setTimeout(r,1200));
+  try{const x=await improv.sensGetConfig();if(equivalentConfig(wantedEncoded,x))return x;last=configDiff(wantedEncoded,x)||"readback diferente";}catch(e){last=e.message||String(e);}
+  throw new Error("Configuração runtime não confirmada. Último detalhe: "+last);
+}
+
+function kvObj(s){
+  const o={};
+  for(const p of String(s||"").split(";")){
+    const i=p.indexOf("="); if(i>=0)o[p.slice(0,i)]=p.slice(i+1);
+  }
+  return o;
+}
+function equivalentConfig(wanted,readback){
+  const a=kvObj(wanted),b=kvObj(readback);
+  for(const k of Object.keys(a)){
+    if(!(k in b)) return false;
+    const av=a[k],bv=b[k];
+    const an=Number(av),bn=Number(bv);
+    const bothNumeric=av.trim()!=="" && bv.trim()!=="" && Number.isFinite(an) && Number.isFinite(bn);
+    if(bothNumeric){
+      const tol=Math.max(1e-5,Math.abs(an)*1e-5);
+      if(Math.abs(an-bn)>tol) return false;
+    }else if(av!==bv) return false;
+  }
+  return true;
+}
+function equivalentGeneric(wanted,readback){
+  const a=kvObj(wanted),b=kvObj(readback);
+  if(String(a.en)==="0") return String(b.en)==="0";
+  return equivalentConfig(wanted,readback);
+}
+async function setget(setter,getter,wanted,label,comparator=equivalentConfig,onProgress=null){
+  let last="";
+  if(onProgress)onProgress(`${label}: gravando...`);
+  try{const returned=await setter(wanted);if(comparator(wanted,returned))return returned;last="retorno da gravação diferente";}catch(e){last=e.message||String(e)}
+  await new Promise(r=>setTimeout(r,1050));
+  if(onProgress)onProgress(`${label}: leitura de recuperação...`);
+  try{const x=await getter();if(comparator(wanted,x))return x;last="readback diferente";}catch(e){last=e.message||String(e)}
+  if(onProgress)onProgress(`${label}: segunda e última gravação...`);
+  try{const returned=await setter(wanted);if(comparator(wanted,returned))return returned;last="retorno final diferente";}catch(e){last=e.message||String(e)}
+  await new Promise(r=>setTimeout(r,1050));
+  try{const x=await getter();if(comparator(wanted,x))return x;last="readback final diferente";}catch(e){last=e.message||String(e)}
+  throw new Error(label+" não confirmado. "+last);
+}
+
+
+function fullToken(){
+  const rnd=Math.random().toString(36).slice(2,8).toUpperCase();
+  return "SENS-"+Date.now().toString(36).toUpperCase()+"-"+rnd;
+}
+function fullStatusObject(ret){
+  // STATUS normalmente retorna um argumento codificado:
+  // valid=1;schema=15;token=...;fp=...
+  if(!ret) return {};
+  const s=Array.isArray(ret) ? (ret[0]||"") : String(ret);
+  return kvObj(s);
+}
+function fullReplyText(ret){
+  if(!ret) return "";
+  if(Array.isArray(ret)) return ret.filter(x=>x!==undefined&&x!==null).join(" | ");
+  return String(ret);
+}
+function commitSnapshot(frames){
+  const sec={}, seq={};
+  for(const row of (frames||[])){
+    if(!Array.isArray(row)||!row.length)continue;
+    const tag=row[0]||"";
+    if(tag==="ERR")throw new Error("COMMIT rejeitado pelo ESP32: "+(row[3]||row.join(" | ")));
+    const n=Number(row[1]||0), last=String(row[2]||"0")==="1", chunk=row[3]||"";
+    if(!(tag in sec)){sec[tag]="";seq[tag]=0;}
+    if(n!==seq[tag])throw new Error(`Snapshot NVS fora de ordem em ${tag}: ${n} ≠ ${seq[tag]}.`);
+    sec[tag]+=chunk; seq[tag]++;
+    if(last) sec[tag+"_done"]=true;
+  }
+  for(const tag of ["META","B","A","G0","G1","C0","C1"])
+    if(!sec[tag+"_done"])throw new Error("Snapshot NVS incompleto: "+tag+".");
+  return sec;
+}
+async function runFullConfigTransactionSerial(c,verifyName,verifySerial,serialTx){
+  const token=fullToken();
+  const basic=encodeRuntime(c);
+  const adv=c.advanced||advForm();
+  const g1=(c.generics&&c.generics[0])||genForm(0);
+  const g2=(c.generics&&c.generics[1])||genForm(1);
+  const c1=(c.corrections&&c.corrections[0])||corForm(0);
+  const c2=(c.corrections&&c.corrections[1])||corForm(1);
+
+  setStatus("cfgstatus",`✓ Identidade confirmada: ${verifyName} | ${verifySerial}\nRev.15D2.2: abrindo transação serial atômica...`);
+  await serialTx.begin(token);
+
+  setStatus("cfgstatus","3/9 — Básico → RAM..."); await serialTx.section("B",basic);
+  setStatus("cfgstatus","4/9 — Avançado → RAM..."); await serialTx.section("A",adv);
+  setStatus("cfgstatus","5/9 — Genéricos → RAM (1/2)..."); await serialTx.section("G0",g1);
+  setStatus("cfgstatus","5/9 — Genéricos → RAM (2/2)..."); await serialTx.section("G1",g2);
+  setStatus("cfgstatus","6/9 — Correções → RAM (1/2)..."); await serialTx.section("C0",c1);
+  setStatus("cfgstatus","6/9 — Correções → RAM (2/2)..."); await serialTx.section("C1",c2);
+
+  setStatus("cfgstatus","7/9 — COMMIT único: persistindo configuração...");
+  const rows=await serialTx.commit();
+  const sec={}; let commitOk=null;
+  for(const row of rows){
+    if(row.startsWith("SENS15D|COMMIT|OK|")){
+      const p=row.split("|"); commitOk={token:p[3]||"",fp:p[4]||""}; continue;
+    }
+    if(row.startsWith("SENS15D|SNAP|")){
+      const p1=row.indexOf("|",13); // depois de SENS15D|SNAP|
+      if(p1<0)continue;
+      const tag=row.slice(13,p1), value=row.slice(p1+1); sec[tag]=value;
+    }
+  }
+  if(!commitOk)throw new Error("COMMIT Rev.15D2.3 não retornou confirmação.");
+  setStatus("cfgstatus","8/9 — Releitura NVS concluída; validando fingerprint...");
+  if(commitOk.token!==token)throw new Error(`Token do COMMIT não confere (${commitOk.token||"ausente"} ≠ ${token}).`);
+  if(!commitOk.fp)throw new Error("Fingerprint ausente no COMMIT Rev.15D2.3.");
+  setStatus("cfgstatus","9/9 — Snapshot NVS recebido; validando configuração...");
+  for(const tag of ["META","B","A","G0","G1","C0","C1"]) if(!(tag in sec)) throw new Error("Snapshot NVS incompleto: "+tag);
+  const meta=kvObj(sec.META);
+  if(String(meta.valid)!=="1")throw new Error("Snapshot NVS não ficou válido.");
+  if(String(meta.schema)!=="17")throw new Error("Schema inesperado no snapshot NVS: "+(meta.schema||"ausente"));
+  if(meta.token!==token)throw new Error("Token do snapshot NVS não confere.");
+  if(meta.fp!==commitOk.fp)throw new Error("Fingerprint do snapshot difere do COMMIT.");
+
+  const checks=[["Básico",basic,sec.B],["Avançado",adv,sec.A],["Genérico 1",g1,sec.G0],
+                ["Genérico 2",g2,sec.G1],["Correção 1",c1,sec.C0],["Correção 2",c2,sec.C1]];
+  for(const [label,wanted,read] of checks){
+    if(!equivalentConfig(wanted,read)) throw new Error(`${label} divergiu da NVS. ${configDiff(wanted,read)}`);
+  }
+  return {token,fp:commitOk.fp,basic,adv,g:[g1,g2],corr:[c1,c2],snapshot:sec};
+}
+
+$("apply").onclick=async()=>{
+  if(!saveConfig()) return;
+  const c=getSaved(); $("apply").disabled=true;
+  let serialTx=null;
+  setStatus("cfgstatus","Abrindo a porta serial do ESP32...");
+  try{
+    if(!("serial" in navigator)) throw new Error("Este navegador não oferece Web Serial. Use Chrome ou Edge no computador.");
+    port=await navigator.serial.requestPort();
+    improv=new SensImprov(port,console.log);
+    await improv.open();
+
+    // V2.6.9 — AUTO RECOVERY
+    // Se a primeira sessão abrir cedo demais, reabre automaticamente A MESMA
+    // porta USB e repete. O usuário continua fazendo apenas um clique.
+    setStatus("cfgstatus","ESP32 conectado. Aguardando inicialização...");
+    await new Promise(r=>setTimeout(r,5000));
+
+    let info=null, ready=false, readyErr="";
+    const ciclos=3;
+    for(let ciclo=1; ciclo<=ciclos && !ready; ciclo++){
+      for(let tentativa=1; tentativa<=3 && !ready; tentativa++){
+        setStatus("cfgstatus",`Preparando Improv... ciclo ${ciclo}/${ciclos}, tentativa ${tentativa}/3`);
+        try{
+          info=await improv.initialize();
+          ready=true;
+        }catch(e){
+          readyErr=e && e.message ? e.message : String(e);
+          if(tentativa<3) await new Promise(r=>setTimeout(r,1300));
+        }
+      }
+      if(!ready && ciclo<ciclos) await reopenImprovSamePort(ciclo,ciclos-1);
+    }
+    if(!ready) throw new Error("ESP32/Improv não ficou pronto após recuperação automática. Último detalhe: "+readyErr);
+    await new Promise(r=>setTimeout(r,500));
+    setStatus("cfgstatus","Improv pronto. Iniciando gravação com confirmação por leitura...");
+
+    setStatus("cfgstatus","1/9 — Identidade: gravando Nome + Serial...");
+    let identity=null;
+    let identityDetail="";
+    try{
+      const ret=await improv.sensSetIdentity(c.name,c.serial);
+      if(ret && ret[0]===c.name && ret[1]===c.serial){
+        identity=ret;
+      }else if(ret){
+        identityDetail=`Retorno: "${ret[0]||""}" | "${ret[1]||""}"`;
+      }
+    }catch(e){
+      identityDetail=e && e.message ? e.message : String(e);
+    }
+
+    // Se o ACK do SET se perdeu, UMA leitura privada confirma o que ficou na NVS.
+    if(!identity){
+      setStatus("cfgstatus","1/9 — Identidade: verificando Nome + Serial...");
+      await new Promise(r=>setTimeout(r,900));
+      try{
+        const rd=await improv.sensGetIdentity();
+        if(rd && rd[0]===c.name && rd[1]===c.serial) identity=rd;
+        else if(rd) identityDetail=`Leitura: "${rd[0]||""}" | "${rd[1]||""}"`;
+      }catch(e){
+        identityDetail=e && e.message ? e.message : String(e);
+      }
+    }
+
+    if(!identity){
+      throw new Error("Nome + Serial não confirmados pela identidade atômica. "+identityDetail);
+    }
+
+    const verifyName=identity[0];
+    const verifySerial=identity[1];
+
+    setIdentityConfirmed(verifyName,verifySerial);
+
+    // Rev.15D2.2: a identidade continua no caminho Improv comprovado.
+    // A configuração runtime muda para o protocolo ASCII curto e determinístico.
+    setStatus("cfgstatus","2/9 — Handoff: identidade OK; entregando a mesma porta ao runtime...");
+    await improv.close(); improv=null;
+    await new Promise(r=>setTimeout(r,900));
+    serialTx=new SensConfigSerial15B(port,console.log);
+    await serialTx.open();
+    const tx=await runFullConfigTransactionSerial(c,verifyName,verifySerial,serialTx);
+    await serialTx.close();
+
+    // Espelho da configuração confirmada pelo COMMIT/fingerprint.
+    showRuntime(tx.basic,verifyName,verifySerial);
+    $("cfgAdvanced").textContent=fmtKv(tx.adv,"advanced");
+    $("cfgGeneric1").textContent=fmtKv(tx.g[0],"generic");
+    $("cfgGeneric2").textContent=fmtKv(tx.g[1],"generic");
+    $("cfgCorrection1").textContent=fmtKv(tx.corr[0],"corr");
+    $("cfgCorrection2").textContent=fmtKv(tx.corr[1],"corr");
+    $("cfgTransaction").textContent=`VÁLIDA • schema 17 • token ${tx.token}`;
+    $("cfgFingerprint").textContent=tx.fp;
+    setStatus("cfgPanelStatus","✓ Configuração completa confirmada por COMMIT + snapshot NVS da Rev.15D2.3.","ok");
+    setStatus("cfgstatus",`✓ Nome + Serial confirmados.
+✓ Todos os blocos preparados em RAM.
+✓ COMMIT único válido.
+✓ Snapshot relido da NVS.
+✓ Fingerprint: ${tx.fp}
+✓ CONFIGURAÇÃO SENS GRAVADA.
+
+Etapa 3 concluída. Prossiga para a Etapa 4 quando quiser configurar o Wi‑Fi.`,"ok");
+    improv=null;
+    port=null;
+    $("wifiStart").disabled=false;
+    setStatus("wstatus","Etapa 3 concluída. Clique em PREPARAR WI‑FI para configurar a rede.","ok");
+  }catch(e){
+    setStatus("cfgstatus","Não foi possível concluir a configuração SENS.\n"+e.message,"err");
+    $("apply").disabled=false;
+
+    // Rev.15D2.3 / Installer 2.10.6.1:
+    // se o erro ocorrer após o handoff Improv -> runtime ASCII,
+    // serialTx é quem mantém a Web Serial aberta.
+    try{await serialTx?.close()}catch(_){}
+    serialTx=null;
+
+    // Se o erro ocorreu antes do handoff, a sessão ainda é Improv.
+    try{await improv?.close()}catch(_){}
+    improv=null;
+
+    // Só zeramos a referência depois de tentar fechar ambos os caminhos.
+    port=null;
+  }
+};
+
+$("connect").onclick=async()=>{
+  if(!improv){setStatus("wstatus","Conecte primeiro pela Etapa 3.","err");return;}
+  const ssid=$("manual").value.trim() || $("ssid").value;
+  const password=$("password").value;
+  if(!ssid){alert("Selecione ou digite a rede Wi‑Fi.");return;}
+  $("connect").disabled=true;$("rescan").disabled=true;
+  setStatus("wstatus",`Conectando à rede "${ssid}"...`);
+  try{
+    let wifiOk=false;
+    let wifiLastError="";
+    for(let tentativa=1; tentativa<=3 && !wifiOk; tentativa++){
+      setStatus("wstatus",`Conectando à rede "${ssid}"... tentativa ${tentativa}/3`);
+      try{
+        await improv.provision(ssid,password);
+        wifiOk=true;
+        break;
+      }catch(e){
+        wifiLastError=e.message;
+        if(tentativa<3){
+          await new Promise(r=>setTimeout(r,1800));
+          try{ await improv.waitForState(5000); }catch(_){}
+          await new Promise(r=>setTimeout(r,900));
+        }
+      }
+    }
+    if(!wifiOk) throw new Error("Wi-Fi não foi confirmado após 3 tentativas. Último detalhe: "+wifiLastError);
+    setStatus("wstatus",`✓ Wi‑Fi provisionado.\n✓ Identidade SENS já estava confirmada.\n\nSENS OPERACIONAL.`,"ok");
+    setWifiConfirmed(ssid);
+    try{await improv.close()}catch(_){}
+    improv=null;port=null;
+  }catch(e){
+    setStatus("wstatus","Não foi possível conectar ao Wi‑Fi.\n"+e.message,"err");
+    try{await improv?.close()}catch(_){}
+    improv=null; port=null;
+    $("wifiStart").disabled=false;
+    $("connect").disabled=false;$("rescan").disabled=false;
+  }
+};
+
+
+$("monitorOpen").onclick=async()=>{
+  if(monitorRunning) return;
+  try{
+    if(!("serial" in navigator)) throw new Error("Web Serial indisponível. Use Chrome ou Edge no computador.");
+    setStatus("monitorStatus","Selecione a porta do ESP32...");
+    monitorPort=await navigator.serial.requestPort();
+    await monitorPort.open({baudRate:115200});
+
+    // Tenta manter DTR/RTS inativos. Algumas placas ainda podem reiniciar ao abrir
+    // a porta; o próprio monitor permitirá comprovar isso pelo Uptime.
+    try{
+      await monitorPort.setSignals({dataTerminalReady:false,requestToSend:false});
+    }catch(_){}
+
+    monitorRunning=true;
+    $("monitorOpen").disabled=true;
+    $("monitorClose").disabled=false;
+    setStatus("monitorStatus","Monitor conectado a 115200 bps. Recebendo dados...","ok");
+
+    const decoder=new TextDecoderStream();
+    const readableClosed=monitorPort.readable.pipeTo(decoder.writable).catch(()=>{});
+    monitorReader=decoder.readable.getReader();
+
+    try{
+      while(monitorRunning){
+        const {value,done}=await monitorReader.read();
+        if(done) break;
+        if(value) appendMonitor(value);
+      }
+    }catch(e){
+      if(monitorRunning) setStatus("monitorStatus","Monitor interrompido: "+e.message,"warn");
+    }finally{
+      try{monitorReader?.releaseLock()}catch(_){}
+      monitorReader=null;
+    }
+  }catch(e){
+    setStatus("monitorStatus","Não foi possível abrir o Monitor SENS.\\n"+e.message,"err");
+    try{await monitorPort?.close()}catch(_){}
+    monitorPort=null;monitorRunning=false;
+    $("monitorOpen").disabled=false;$("monitorClose").disabled=true;
+  }
+};
+
+$("monitorClose").onclick=async()=>{
+  monitorRunning=false;
+  try{await monitorReader?.cancel()}catch(_){}
+  try{monitorReader?.releaseLock()}catch(_){}
+  monitorReader=null;
+  try{await monitorPort?.close()}catch(_){}
+  monitorPort=null;
+  $("monitorOpen").disabled=false;
+  $("monitorClose").disabled=true;
+  setStatus("monitorStatus","Monitor desconectado. O SENS continua operando normalmente.");
+};
+
+$("monitorClear").onclick=()=>{
+  $("monitor").innerHTML='<span class="monitor-placeholder">Monitor limpo. Aguardando novos dados...</span>';
+};
+
+buildV28();
+const c=getSaved();
+if(c){restoreFull(c);setStatus("saved",`Guardado nesta versão do Installer:\nNome: ${c.name}\nSerial: ${c.serial}\nPapel: ${c.role||"NORMAL"}\nIntervalo: ${c.sendSec||60}s`,"ok");}
+else{setStatus("saved","Nova versão: nenhum preenchimento anterior foi importado. Configure este equipamento e clique em GUARDAR CONFIGURAÇÃO.");}
+refreshYFCatalogUI();
+// Rev.03K: estado visual não é persistente. Todo F5 inicia os grupos recolhidos.
+document.querySelectorAll("details").forEach(d=>{ d.open=false; });
+</script>
+</body></html>

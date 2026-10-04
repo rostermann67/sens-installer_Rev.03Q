@@ -1,0 +1,10 @@
+SENS INSTALLER NEXT Rev.03Q — preparação ADS1115 + UART genérica
+
+Firmware embarcado preservado: Rev.03K.
+
+Alterações do Installer:
+- DS18B20 movido para card do catálogo, ao lado do YF-S201, com seletor no próprio card.
+- Correção metrológica passa a orientar explicitamente o uso de ponto (.) como separador decimal.
+- ADS1115 permite selecionar/documentar outras grandezas e unidades no Installer. No FW03K somente CO2/ppm permanece operacional como saída científica; demais opções ficam preparadas como metadados locais para evolução do firmware.
+- UART genérica recebe campos de preparação/documentação (modelo, grandeza, unidade, RX, TX, baud e protocolo). No FW03K isso não habilita protocolo UART genérico; T6613 continua usando o driver consolidado existente.
+- Binários e manifests Rev.03K preservados sem alteração.

@@ -1,0 +1,11 @@
+SENS INSTALLER NEXT — REV02G PAPEL TRANSPORTE
+
+Base: SENS_INSTALLER_NEXT_AQUISICAO_REV02E_PAPEL_SDF.
+Firmware integrado: SENS NEXT CONVERSOR ADC-I2C REV02G PAPEL TRANSPORTE.
+
+Alteração funcional desta revisão:
+- transporte explícito do PAPEL do equipamento (NORMAL / AFERIR / REFERENCIA) na query enviada à SENS Platform.
+- preservado o restante do Installer.
+
+Teste-alvo:
+TRACE_TRANSPORTE_286 deve receber papel=AFERIR (ou REFERENCIA/NORMAL conforme configuração), sem inferência por nome ou serial.

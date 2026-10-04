@@ -1,0 +1,17 @@
+SENS NEXT — UNIVERSAL Rev.03D — CORREÇÃO GENÉRICA
+Data: 2026-09-21
+
+Base do Installer: Rev.03B, preservando interface e configuração Improv/NVS.
+Firmware embarcado: SENS NEXT Universal Rev.03D.
+
+Objetivo específico da Rev.03D:
+- transportar como valor principal o VALUE pós-correção para sensores/grandezas;
+- preservar RAW separadamente para rastreabilidade;
+- manter a correção independente do canal 1 ou 2;
+- manter PAPEL NORMAL / AFERIR / REFERENCIA e demais funções da linhagem.
+
+Teste-alvo:
+DHT22 temperatura com a=1 e b=+10:
+RAW ~21,3 C -> VALUE ~31,3 C -> Platform/Panorama ~31,3 C.
+
+Atenção: esta revisão deve ser validada em bancada antes de ser promovida a versão estável.

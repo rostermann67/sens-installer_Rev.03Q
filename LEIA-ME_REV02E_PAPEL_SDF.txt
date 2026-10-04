@@ -1,0 +1,7 @@
+SENS INSTALLER NEXT — AQUISIÇÃO REV02E PAPEL SDF
+
+Base: SENS_INSTALLER_NEXT_AQUISICAO_REV02D_T6613_UART(2).zip
+Alteração desta revisão: somente atualização dos binários de firmware para REV02E PAPEL SDF e manifests correspondentes.
+Offsets PRESERVAR: 0x1000 bootloader; 0x8000 partitions; 0xE000 boot_app0; 0x10000 app.
+DO ZERO: merged.bin offset 0.
+Objetivo do firmware REV02E: transportar explicitamente o papel do equipamento no SDF.

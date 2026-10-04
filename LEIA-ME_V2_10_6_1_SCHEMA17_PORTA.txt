@@ -1,0 +1,14 @@
+SENS INSTALLER V2.10.6.1 — REV15D2.3 URL PLATFORM
+
+Correções pontuais sobre V2.10.6:
+1. Validação do snapshot NVS atualizada de schema 16 para schema 17.
+2. Painel de confirmação passa a exibir schema 17.
+3. A sessão serial runtime (serialTx) agora é fechada também se a Etapa 3 falhar
+   depois do handoff Improv -> protocolo ASCII.
+4. Isso evita o erro de segunda tentativa:
+   "Failed to execute 'open' on 'SerialPort': The port is already open."
+
+Firmware/binários Rev15D2.3: INALTERADOS.
+URL Platform: INALTERADA.
+Buffer/ACK/store-and-forward: INALTERADOS.
+Olho da senha Wi-Fi: MANTIDO.

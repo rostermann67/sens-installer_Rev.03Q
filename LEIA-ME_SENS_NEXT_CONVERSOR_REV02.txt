@@ -1,0 +1,6 @@
+SENS INSTALLER NEXT — CONVERSOR ADC-I2C Rev.02
+
+Primeiro conversor implementado: ADS1115.
+HOT T8100: AIN1 | 0-4 V | 0-2000 ppm | sem divisor | media movel 10.
+O papel do equipamento permanece independente: NORMAL / AFERIR / REFERENCIA.
+AIN0 do modulo de bancada foi diagnosticado como defeituoso; AIN1 e o canal usado no HOT.
