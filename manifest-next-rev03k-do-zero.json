@@ -1,6 +1,6 @@
 {
-  "name": "SENS NEXT — UNIVERSAL Rev.03K — Pulso/Catálogo — Instalação do Zero",
-  "version": "NEXT-UNIVERSAL Rev.03K",
+  "name": "SENS NEXT — UNIVERSAL Rev.03L — I2C_GENERIC V1 — Instalação do Zero",
+  "version": "NEXT-UNIVERSAL Rev.03L",
   "new_install_prompt_erase": false,
   "builds": [
     {

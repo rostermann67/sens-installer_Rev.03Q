@@ -48,7 +48,7 @@ details.config-group>summary{font-weight:800;color:#176b3a;cursor:pointer}
 </style>
 </head>
 <body>
-<header><h1>SENS INSTALLER NEXT — UNIVERSAL Rev.03Q — PREPARAÇÃO ADS1115 + UART GENÉRICA</h1><div>LAB • INTERFACES / DRIVERS • CONVERSORES • Installer Rev.03Q • Firmware Rev.03K</div></header>
+<header><h1>SENS INSTALLER NEXT — UNIVERSAL Rev.03R — I2C GENÉRICO</h1><div>LAB • INTERFACES / DRIVERS • CONVERSORES • Installer Rev.03R • Firmware Rev.03L</div></header>
 <main>
 <section class="card" id="preconfigCard">
 <div class="step">ETAPA 1 — CONFIGURAÇÃO DO EQUIPAMENTO</div><h2>Configure o SENS antes de instalar</h2>
@@ -87,7 +87,7 @@ details.config-group>summary{font-weight:800;color:#176b3a;cursor:pointer}
   <details class="config-group" style="margin-top:12px"><summary>UART</summary>
     <div style="margin-top:12px">
       <b>UART GENÉRICA — preparação</b>
-      <div class="smallnote" style="margin-top:8px"><b>Firmware Rev.03K:</b> o T6613 continua funcional pelo driver UART consolidado. Os campos abaixo preparam/documentam uma futura UART genérica, mas ainda não ativam leitura científica de protocolos arbitrários no firmware.</div>
+      <div class="smallnote" style="margin-top:8px"><b>Firmware Rev.03L:</b> o T6613 continua funcional pelo driver UART consolidado. Os campos abaixo preparam/documentam uma futura UART genérica, mas ainda não ativam leitura científica de protocolos arbitrários no firmware.</div>
       <div class="config-grid" style="margin-top:12px">
         <label>Instrumento / modelo<input id="uart_model" placeholder="Ex.: analisador CH4"></label>
         <label>Grandeza<input id="uart_qty" placeholder="Ex.: methane"></label>
@@ -104,7 +104,7 @@ details.config-group>summary{font-weight:800;color:#176b3a;cursor:pointer}
 <details class="config-group"><summary>CONVERSORES</summary>
   <details class="config-group" style="margin-top:12px"><summary>ADC-I²C / ADS1115</summary>
     <label class="checkitem" style="margin-top:12px"><input type="checkbox" id="s_converter"> <b>ATIVAR CONVERSOR ADS1115</b></label>
-    <div class="warn" style="margin-top:10px"><b>Firmware Rev.03K:</b> ADS1115 já é operacional para CO₂/ppm. Outras grandezas podem ser selecionadas abaixo para preparar/documentar a configuração, mas só passam a ser saída científica quando o firmware ganhar o mapeamento genérico correspondente.</div>
+    <div class="warn" style="margin-top:10px"><b>Firmware Rev.03L:</b> ADS1115 já é operacional para CO₂/ppm. Outras grandezas podem ser selecionadas abaixo para preparar/documentar a configuração, mas só passam a ser saída científica quando o firmware ganhar o mapeamento genérico correspondente.</div>
     <div class="config-grid" style="margin-top:12px">
       <label>Instrumento / modelo<input id="conv_model" placeholder="Ex.: Telaire T8100 (metadado)"></label>
       <label>Grandeza<select id="conv_qty"><option value="co2">CO₂</option><option value="temperature">Temperatura</option><option value="humidity">Umidade</option><option value="pressure">Pressão</option><option value="methane">CH₄ / Metano</option><option value="n2o">N₂O</option><option value="flow">Vazão</option><option value="custom">Outra / personalizada</option></select></label>
@@ -122,7 +122,7 @@ details.config-group>summary{font-weight:800;color:#176b3a;cursor:pointer}
       <label>Warm-up<select id="warm"><option value="1">INSTANTÂNEO</option><option value="0">MÉDIA PARCIAL</option></select></label>
       <select id="tmode" style="display:none"><option value="1" selected>ANALÓGICO</option><option value="2">UART</option><option value="3">AMBOS</option></select>
     </div>
-    <div id="convCompat" class="smallnote" style="margin-top:8px;font-weight:700">OPERACIONAL NO FW03K — saída científica CO₂/ppm.</div>
+    <div id="convCompat" class="smallnote" style="margin-top:8px;font-weight:700">Compatibilidade do conversor legado preservada no FW03L.</div>
   </details>
 </details>
 <details class="config-group"><summary>Intervalos de leitura</summary><div class="config-grid" style="margin-top:12px">
@@ -134,7 +134,7 @@ details.config-group>summary{font-weight:800;color:#176b3a;cursor:pointer}
 <div><b>GPIO4</b> DHT22</div><div><b>GPIO13</b> DS18B20</div><div><b>GPIO35</b> T6613 ADC</div><div><b>GPIO16/17</b> T6613 UART</div>
 <div><b>GPIO21/22</b> I²C compartilhado</div><div><b>GPIO18/5/19</b> MAX6675</div><div><b id="yfPinMap">GPIO23</b> YF-S201 (quando ativo)</div><div><b>0x48</b> ADS1115</div><div><b>0x23</b> BH1750</div><div><b>0x39</b> APDS9960</div></div>
 <div id="pinWarnings" class="warn">Mapa ativo. Conflitos de GPIO dos genéricos serão sinalizados.</div></details>
-<details class="config-group" style="display:none"><summary>Compatibilidade interna — slots genéricos</summary><p class="smallnote">Quando o slot está DESATIVADO, o Installer confirma somente o estado OFF. Metadados antigos/defaults na NVS não geram falso erro.</p><div id="genericSlots"></div></details>
+<details class="config-group" open><summary>SENSOR GENÉRICO — slots configuráveis</summary><p class="smallnote"><b>GENERIC_SENSOR V1:</b> configure sensores que não existem no catálogo usando motores já incorporados ao firmware. Para o primeiro ensaio, use <b>I2C_GENERIC</b>. O firmware não identifica o sensor pelo nome/modelo.</p><div id="genericSlots"></div></details>
 <details class="config-group"><summary>Correção metrológica — y = a × x + b</summary><p class="smallnote">2 correções metrológicas disponíveis. Escolha o sensor/canal habilitado e depois a grandeza. Vale para sensores nativos e genéricos. Linhas OFF e vazias são ignoradas.<br><b>Separador decimal:</b> use ponto (.) nos coeficientes, por exemplo <b>a = 1.0234</b> e <b>b = -12.5</b>. Não use vírgula.</p><div id="correctionSlots"></div></details>
 <div class="actions"><button id="save">GUARDAR CONFIGURAÇÃO</button><button id="newConfig" type="button">NOVA CONFIGURAÇÃO / LIMPAR CAMPOS</button></div><div id="saved" class="status">Preencha e guarde a configuração antes da instalação.</div>
 </section>
@@ -177,7 +177,7 @@ details.config-group>summary{font-weight:800;color:#176b3a;cursor:pointer}
 <section class="card" id="configCard">
 <div class="step">CONFIGURAÇÃO GRAVADA NO EQUIPAMENTO</div><h2>Leitura da configuração runtime</h2>
 <p class="note">Espelho da configuração enviada e confirmada pela transação atômica da Rev.15D2.3. O COMMIT valida todos os blocos e gera um snapshot persistente relido da NVS. A senha Wi‑Fi nunca é exibida.</p>
-<table class="config-table"><tr><th>Firmware</th><td>SENS NEXT Universal Rev.03K (fonte catálogo/pulso)</td></tr><tr><th>Nome</th><td id="cfgName">Aguardando</td></tr><tr><th>Serial / ID SENS</th><td id="cfgSerial">Aguardando</td></tr><tr><th>Projeto</th><td id="cfgProject">Aguardando</td></tr><tr><th>Local</th><td id="cfgLocation">Aguardando</td></tr><tr><th>URL da Platform</th><td id="cfgPlatformUrl">Aguardando</td></tr><tr><th>Papel</th><td id="cfgRole">Aguardando</td></tr><tr><th>Intervalo</th><td id="cfgSend">Aguardando</td></tr><tr><th>Sync Platform</th><td id="cfgSync">Aguardando</td></tr><tr><th>Sensores</th><td id="cfgSensors">Aguardando leitura</td></tr><tr><th>Avançado</th><td id="cfgAdvanced">Aguardando leitura</td></tr><tr><th>Genérico 1</th><td id="cfgGeneric1">Aguardando leitura</td></tr><tr><th>Genérico 2</th><td id="cfgGeneric2">Aguardando leitura</td></tr><tr><th>Correção 1</th><td id="cfgCorrection1">Aguardando leitura</td></tr><tr><th>Correção 2</th><td id="cfgCorrection2">Aguardando leitura</td></tr><tr><th>Transação Rev.15D2.3</th><td id="cfgTransaction">Aguardando COMMIT</td></tr><tr><th>Fingerprint</th><td id="cfgFingerprint">—</td></tr><tr><th>Fonte da identidade</th><td id="cfgIdentitySource">Aguardando confirmação</td></tr><tr><th>Wi‑Fi</th><td id="cfgWifi">Não configurado nesta sessão</td></tr><tr><th>Senha Wi‑Fi</th><td><span class="pill">não exibida</span></td></tr></table>
+<table class="config-table"><tr><th>Firmware</th><td>SENS NEXT Universal Rev.03L — GENERIC_SENSOR V1 / I2C_GENERIC</td></tr><tr><th>Nome</th><td id="cfgName">Aguardando</td></tr><tr><th>Serial / ID SENS</th><td id="cfgSerial">Aguardando</td></tr><tr><th>Projeto</th><td id="cfgProject">Aguardando</td></tr><tr><th>Local</th><td id="cfgLocation">Aguardando</td></tr><tr><th>URL da Platform</th><td id="cfgPlatformUrl">Aguardando</td></tr><tr><th>Papel</th><td id="cfgRole">Aguardando</td></tr><tr><th>Intervalo</th><td id="cfgSend">Aguardando</td></tr><tr><th>Sync Platform</th><td id="cfgSync">Aguardando</td></tr><tr><th>Sensores</th><td id="cfgSensors">Aguardando leitura</td></tr><tr><th>Avançado</th><td id="cfgAdvanced">Aguardando leitura</td></tr><tr><th>Genérico 1</th><td id="cfgGeneric1">Aguardando leitura</td></tr><tr><th>Genérico 2</th><td id="cfgGeneric2">Aguardando leitura</td></tr><tr><th>Correção 1</th><td id="cfgCorrection1">Aguardando leitura</td></tr><tr><th>Correção 2</th><td id="cfgCorrection2">Aguardando leitura</td></tr><tr><th>Transação Rev.15D2.3</th><td id="cfgTransaction">Aguardando COMMIT</td></tr><tr><th>Fingerprint</th><td id="cfgFingerprint">—</td></tr><tr><th>Fonte da identidade</th><td id="cfgIdentitySource">Aguardando confirmação</td></tr><tr><th>Wi‑Fi</th><td id="cfgWifi">Não configurado nesta sessão</td></tr><tr><th>Senha Wi‑Fi</th><td><span class="pill">não exibida</span></td></tr></table>
 <div id="cfgPanelStatus" class="status">O painel será atualizado conforme Nome, Serial e Wi‑Fi forem confirmados.</div>
 </section>
 
@@ -327,11 +327,22 @@ function validSerial(s){return /^[A-Za-z0-9-]+$/.test(s);}
 function buildV28(){
  let g=$("genericSlots");for(let i=0;i<2;i++){let d=document.createElement("div");d.className="sensorbox";d.innerHTML=`<b>GENÉRICO ${i+1}</b><div class="config-grid">
 <label>Ativo<select id="g${i}_en"><option value="0">NÃO</option><option value="1">SIM</option></select></label><label>ID<input id="g${i}_id" value="G${String(i+1).padStart(2,"0")}"></label>
-<label>Modelo<input id="g${i}_model"></label><label>Fabricante<input id="g${i}_mfr"></label><label>Interface<select id="g${i}_if"><option value="10">ADC ESP32</option><option value="11">ADS1115</option><option value="20">RS485/Modbus</option><option value="21">4–20 mA</option><option value="22">RS232</option><option value="23">0–10 V</option><option value="24">PULSO/FREQUÊNCIA</option></select></label>
+<label>Modelo<input id="g${i}_model"></label><label>Fabricante<input id="g${i}_mfr"></label><label>Interface<select id="g${i}_if"><option value="10">ADC ESP32</option><option value="11">ADS1115</option><option value="20">RS485/Modbus</option><option value="21">4–20 mA</option><option value="22">RS232</option><option value="23">0–10 V</option><option value="24">PULSO/FREQUÊNCIA</option><option value="25">I²C GENÉRICO</option></select></label>
 <label>GPIO<input id="g${i}_gpio" value="-1"></label><label>Grandeza<input id="g${i}_qty"></label><label>Unidade<input id="g${i}_unit"></label>
 <label>Entrada mín<input id="g${i}_in0" value="0"></label><label>Entrada máx<input id="g${i}_in1" value="3.3"></label><label>Escala mín<input id="g${i}_sc0" value="0"></label><label>Escala máx<input id="g${i}_sc1" value="100"></label>
 <label>Baud<input id="g${i}_baud" value="9600"></label><label>Slave<input id="g${i}_slave" value="1"></label><label>Register<input id="g${i}_reg" value="0"></label><label>Fator<input id="g${i}_factor" value="1"></label>
-<label>Pulsos/unidade<input id="g${i}_ppu" value="450"></label><label>Janela pulso ms<input id="g${i}_pwin" value="1000"></label><label>Totalizador<select id="g${i}_total"><option value="1">SIM</option><option value="0">NÃO</option></select></label></div>`;g.appendChild(d)}
+<label>Pulsos/unidade<input id="g${i}_ppu" value="450"></label><label>Janela pulso ms<input id="g${i}_pwin" value="1000"></label><label>Totalizador<select id="g${i}_total"><option value="1">SIM</option><option value="0">NÃO</option></select></label>
+<label>I²C endereço<input id="g${i}_i2ca" value="0x39"></label><label>Init reg 1<input id="g${i}_ir1" value="0x80"></label><label>Init valor 1<input id="g${i}_iv1" value="0x03"></label>
+<label>Init reg 2<input id="g${i}_ir2" value="-1"></label><label>Init valor 2<input id="g${i}_iv2" value="0"></label><label>Data reg CH0<input id="g${i}_dr0" value="0x8C"></label>
+<label>Data reg CH1<input id="g${i}_dr1" value="0x8E"></label><label>Bytes<select id="g${i}_bytes"><option value="2" selected>2</option><option value="1">1</option></select></label>
+<label>Endian<select id="g${i}_le"><option value="1" selected>Little endian</option><option value="0">Big endian</option></select></label>
+<label>Estabilização ms<input id="g${i}_settle" value="450"></label><label>Fórmula<select id="g${i}_formula"><option value="0">CH0 × fator</option><option value="1" selected>Razão CH1/CH0 — piecewise</option></select></label>
+<label>t0<input id="g${i}_t0" value="0.50"></label><label>a0<input id="g${i}_a0" value="0.0304"></label><label>b0<input id="g${i}_b0" value="-0.062"></label>
+<label>t1<input id="g${i}_t1" value="0.61"></label><label>a1<input id="g${i}_a1" value="0.0224"></label><label>b1<input id="g${i}_b1" value="-0.031"></label>
+<label>t2<input id="g${i}_t2" value="0.80"></label><label>a2<input id="g${i}_a2" value="0.0128"></label><label>b2<input id="g${i}_b2" value="-0.0153"></label>
+<label>t3<input id="g${i}_t3" value="1.30"></label><label>a3<input id="g${i}_a3" value="0.00146"></label><label>b3<input id="g${i}_b3" value="-0.00112"></label>
+<label>t4<input id="g${i}_t4" value="1.30"></label><label>a4<input id="g${i}_a4" value="0"></label><label>b4<input id="g${i}_b4" value="0"></label>
+</div><div class="smallnote" style="margin-top:8px">PoC TSL2561: Interface 25 • endereço típico 0x39 • CONTROL 0x80=0x03 • CH0 0x8C • CH1 0x8E • 2 bytes little-endian • ~450 ms. O nome TSL2561 é apenas metadado/configuração; não existe driver dedicado.</div>`;g.appendChild(d)}
  let c=$("correctionSlots");for(let i=0;i<2;i++){let d=document.createElement("div");d.className="sensorbox";d.innerHTML=`<b>CANAL ${i+1}</b><div class="config-grid">
 <label>APLICAR CORREÇÃO<select id="c${i}_en"><option value="0">NÃO</option><option value="1">SIM</option></select></label><label>Sensor / canal<select id="c${i}_sid"><option value="">Selecione um sensor habilitado...</option></select></label><label>Grandeza<select id="c${i}_qty"><option value="">Selecione primeiro o sensor...</option></select></label><label>Ganho (a)<input id="c${i}_a" value="1"></label>
 <label>Offset (b)<input id="c${i}_b" value="0"></label><label>ID da Aferição<input id="c${i}_cid"></label><label>Verificada<select id="c${i}_ver"><option value="0">NÃO</option><option value="1">SIM</option></select></label></div><div class="smallnote" id="c${i}_eq" style="margin-top:10px;font-weight:700">Equação: y = 1 × x + 0</div>`;c.appendChild(d);
@@ -418,7 +429,7 @@ function wireCorrectionMenus(){
 function updateConverterCompatibilityNote(){
   const q=$("conv_qty")?.value||"co2";
   const warn=$("convCompat");
-  if(warn) warn.textContent=q==="co2"?"OPERACIONAL NO FW03K — saída científica CO₂/ppm.":"PREPARADO NO INSTALLER — esta grandeza ainda requer suporte no firmware para virar saída científica.";
+  if(warn) warn.textContent=q==="co2"?"Compatibilidade do conversor legado preservada no FW03L.":"PREPARADO NO INSTALLER — esta grandeza ainda requer suporte no firmware para virar saída científica.";
 }
 
 function applyConverterProfile(){
@@ -437,7 +448,7 @@ $("conv_qty")?.addEventListener("change",updateConverterCompatibilityNote);
 updateConverterCompatibilityNote();
 
 function advForm(){const tmode=$("s_t6613")?.checked?2:1;return `tmode=${tmode};aif=${$("aif").value};adsch=${$("adsch").value};vin0=${$("vin0").value};vin1=${$("vin1").value};sc0=${$("sc0").value};sc1=${$("sc1").value};div=${$("divider").value};divr=${$("divratio").value};mavg=${$("mavg").value};mwin=${$("mwin").value};warm=${$("warm").value};i_dht=${$("i_dht").value};i_ds=${$("i_ds").value};i_t66=${$("i_t66").value};i_b18=${$("i_b18").value};i_be2=${$("i_be2").value};i_be6=${$("i_be6").value};i_b38=${$("i_b38").value};i_bh=${$("i_bh").value};i_ap=${$("i_ap").value};i_th=${$("i_th").value};i_gps=${$("i_gps").value}`}
-function genForm(i){return `en=${$("g"+i+"_en").value};id=${$("g"+i+"_id").value};model=${$("g"+i+"_model").value};mfr=${$("g"+i+"_mfr").value};if=${$("g"+i+"_if").value};qty=${$("g"+i+"_qty").value};unit=${$("g"+i+"_unit").value};gpio=${$("g"+i+"_gpio").value};in0=${$("g"+i+"_in0").value};in1=${$("g"+i+"_in1").value};sc0=${$("g"+i+"_sc0").value};sc1=${$("g"+i+"_sc1").value};baud=${$("g"+i+"_baud").value};slave=${$("g"+i+"_slave").value};reg=${$("g"+i+"_reg").value};factor=${$("g"+i+"_factor").value};ppu=${$("g"+i+"_ppu").value};pwin=${$("g"+i+"_pwin").value};total=${$("g"+i+"_total").value}`}
+function genForm(i){return `en=${$("g"+i+"_en").value};id=${$("g"+i+"_id").value};model=${$("g"+i+"_model").value};mfr=${$("g"+i+"_mfr").value};if=${$("g"+i+"_if").value};qty=${$("g"+i+"_qty").value};unit=${$("g"+i+"_unit").value};gpio=${$("g"+i+"_gpio").value};in0=${$("g"+i+"_in0").value};in1=${$("g"+i+"_in1").value};sc0=${$("g"+i+"_sc0").value};sc1=${$("g"+i+"_sc1").value};baud=${$("g"+i+"_baud").value};slave=${$("g"+i+"_slave").value};reg=${$("g"+i+"_reg").value};factor=${$("g"+i+"_factor").value};ppu=${$("g"+i+"_ppu").value};pwin=${$("g"+i+"_pwin").value};total=${$("g"+i+"_total").value};i2ca=${$("g"+i+"_i2ca").value};ir1=${$("g"+i+"_ir1").value};iv1=${$("g"+i+"_iv1").value};ir2=${$("g"+i+"_ir2").value};iv2=${$("g"+i+"_iv2").value};dr0=${$("g"+i+"_dr0").value};dr1=${$("g"+i+"_dr1").value};bytes=${$("g"+i+"_bytes").value};le=${$("g"+i+"_le").value};settle=${$("g"+i+"_settle").value};formula=${$("g"+i+"_formula").value};t0=${$("g"+i+"_t0").value};a0=${$("g"+i+"_a0").value};b0=${$("g"+i+"_b0").value};t1=${$("g"+i+"_t1").value};a1=${$("g"+i+"_a1").value};b1=${$("g"+i+"_b1").value};t2=${$("g"+i+"_t2").value};a2=${$("g"+i+"_a2").value};b2=${$("g"+i+"_b2").value};t3=${$("g"+i+"_t3").value};a3=${$("g"+i+"_a3").value};b3=${$("g"+i+"_b3").value};t4=${$("g"+i+"_t4").value};a4=${$("g"+i+"_a4").value};b4=${$("g"+i+"_b4").value}`}
 function sensDecimal(v,label){
   const raw=String(v??"").trim();
   const normalized=raw.replace(/\s+/g,"").replace(",",".");
@@ -475,7 +486,7 @@ function restoreFull(c){
   V("name",c.name||"");V("serial",c.serial||"");V("project",c.project||"");V("location",c.location||"");V("platformUrl",c.platformUrl||"");V("role",c.role||"NORMAL");V("sendSec",c.sendSec||60);$("syncPlatform").checked=c.sync!==false;
   const z=c.sensors||{};if(z.t8100 && z.converter===undefined){z.converter=true;z.convModel=z.convModel||"Telaire T8100";}for(const [id,k] of [["s_dht22","dht22"],["s_t6613","t6613"],["s_converter","converter"],["s_bmp180","bmp180"],["s_bme280","bme280"],["s_bme680","bme680"],["s_bmp388","bmp388"],["s_bh1750","bh1750"],["s_apds","apds"],["s_thermok","thermok"],["s_gps","gps"]])$(id).checked=!!z[k];V("dsMode",z.dsMode||0);V("conv_model",z.convModel||"");V("conv_qty",z.convQty||"co2");V("conv_unit",z.convUnit||"ppm");V("uart_model",z.uartModel||"");V("uart_qty",z.uartQty||"");V("uart_unit",z.uartUnit||"");V("uart_rx",z.uartRx||"16");V("uart_tx",z.uartTx||"17");V("uart_baud",z.uartBaud||"19200");V("uart_proto",z.uartProto||"");
   const a=kvObj(c.advanced||"");for(const [k,id] of Object.entries({tmode:"tmode",aif:"aif",adsch:"adsch",vin0:"vin0",vin1:"vin1",sc0:"sc0",sc1:"sc1",div:"divider",divr:"divratio",mavg:"mavg",mwin:"mwin",warm:"warm",i_dht:"i_dht",i_ds:"i_ds",i_t66:"i_t66",i_b18:"i_b18",i_be2:"i_be2",i_be6:"i_be6",i_b38:"i_b38",i_bh:"i_bh",i_ap:"i_ap",i_th:"i_th",i_gps:"i_gps"}))if(k in a)V(id,a[k]);
-  for(let i=0;i<2;i++){const g=kvObj(c.generics?.[i]||"");for(const k of ["en","id","model","mfr","if","gpio","qty","unit","in0","in1","sc0","sc1","baud","slave","reg","factor","ppu","pwin","total"])if(k in g)V(`g${i}_${k}`,g[k]);const q=kvObj(c.corrections?.[i]||"");for(const k of ["sid","qty","a","b","cid","en","ver"])if(k in q)V(`c${i}_${k}`,q[k]);updateCorrectionPreview(i);}syncYFFromSaved(c);
+  for(let i=0;i<2;i++){const g=kvObj(c.generics?.[i]||"");for(const k of ["en","id","model","mfr","if","gpio","qty","unit","in0","in1","sc0","sc1","baud","slave","reg","factor","ppu","pwin","total","i2ca","ir1","iv1","ir2","iv2","dr0","dr1","bytes","le","settle","formula","t0","a0","b0","t1","a1","b1","t2","a2","b2","t3","a3","b3","t4","a4","b4"])if(k in g)V(`g${i}_${k}`,g[k]);const q=kvObj(c.corrections?.[i]||"");for(const k of ["sid","qty","a","b","cid","en","ver"])if(k in q)V(`c${i}_${k}`,q[k]);updateCorrectionPreview(i);}syncYFFromSaved(c);
   refreshCorrectionMenus();
 }
 function clearNewConfig(){localStorage.removeItem("sensInstallerNEXTCONVERSORREV02");location.reload();}
@@ -823,7 +834,7 @@ async function runFullConfigTransactionSerial(c,verifyName,verifySerial,serialTx
   for(const tag of ["META","B","A","G0","G1","C0","C1"]) if(!(tag in sec)) throw new Error("Snapshot NVS incompleto: "+tag);
   const meta=kvObj(sec.META);
   if(String(meta.valid)!=="1")throw new Error("Snapshot NVS não ficou válido.");
-  if(String(meta.schema)!=="17")throw new Error("Schema inesperado no snapshot NVS: "+(meta.schema||"ausente"));
+  if(String(meta.schema)!=="18")throw new Error("Schema inesperado no snapshot NVS: "+(meta.schema||"ausente"));
   if(meta.token!==token)throw new Error("Token do snapshot NVS não confere.");
   if(meta.fp!==commitOk.fp)throw new Error("Fingerprint do snapshot difere do COMMIT.");
 
@@ -924,7 +935,7 @@ $("apply").onclick=async()=>{
     $("cfgGeneric2").textContent=fmtKv(tx.g[1],"generic");
     $("cfgCorrection1").textContent=fmtKv(tx.corr[0],"corr");
     $("cfgCorrection2").textContent=fmtKv(tx.corr[1],"corr");
-    $("cfgTransaction").textContent=`VÁLIDA • schema 17 • token ${tx.token}`;
+    $("cfgTransaction").textContent=`VÁLIDA • schema 18 • token ${tx.token}`;
     $("cfgFingerprint").textContent=tx.fp;
     setStatus("cfgPanelStatus","✓ Configuração completa confirmada por COMMIT + snapshot NVS da Rev.15D2.3.","ok");
     setStatus("cfgstatus",`✓ Nome + Serial confirmados.

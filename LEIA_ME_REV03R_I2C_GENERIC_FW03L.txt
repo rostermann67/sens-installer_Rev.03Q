@@ -1,0 +1,28 @@
+SENS INSTALLER NEXT — Rev.03R / Firmware Rev.03L
+====================================================
+
+Base: Installer Rev.03Q.
+Firmware: Rev.03L I2C_GENERIC V1 compilado pelo usuário.
+
+IMPORTANTE — nomes mantidos para overwrite no GitHub:
+Os cinco arquivos em /firmware continuam com os MESMOS NOMES Rev.03K usados
+pelo Installer anterior. O CONTEÚDO deles, porém, é o binário compilado da Rev.03L.
+Isso foi feito deliberadamente para permitir copiar/colar sobre o repositório
+GitHub sem alterar URLs/caminhos já publicados.
+
+Manifests também mantêm os mesmos nomes:
+- manifest-next-rev03k-do-zero.json
+- manifest-next-rev03k-preservar.json
+
+Alterações do Installer:
+- UI identifica Installer Rev.03R / Firmware Rev.03L.
+- Full Config Schema esperado: 18.
+- SENSOR GENÉRICO fica visível.
+- Interface 25 = I2C_GENERIC.
+- Campos declarativos I2C enviados nos blocos G0/G1.
+- Valores iniciais adequados ao primeiro PoC com TSL2561.
+- Nenhum driver/biblioteca TSL2561 é adicionado ao firmware pelo Installer.
+
+ATENÇÃO:
+O modelo TSL2561 continua sendo metadado. A leitura é executada pelo motor
+I2C_GENERIC do firmware.
