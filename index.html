@@ -48,7 +48,7 @@ details.config-group>summary{font-weight:800;color:#176b3a;cursor:pointer}
 </style>
 </head>
 <body>
-<header><h1>SENS INSTALLER NEXT — UNIVERSAL Rev.03R — I2C GENÉRICO</h1><div>LAB • INTERFACES / DRIVERS • CONVERSORES • Installer Rev.03R • Firmware Rev.03L</div></header>
+<header><h1>SENS INSTALLER NEXT — UNIVERSAL Rev.03S — I2C GENÉRICO</h1><div>LAB • INTERFACES / DRIVERS • CONVERSORES • Installer Rev.03S • Firmware Rev.03M</div></header>
 <main>
 <section class="card" id="preconfigCard">
 <div class="step">ETAPA 1 — CONFIGURAÇÃO DO EQUIPAMENTO</div><h2>Configure o SENS antes de instalar</h2>
@@ -87,7 +87,7 @@ details.config-group>summary{font-weight:800;color:#176b3a;cursor:pointer}
   <details class="config-group" style="margin-top:12px"><summary>UART</summary>
     <div style="margin-top:12px">
       <b>UART GENÉRICA — preparação</b>
-      <div class="smallnote" style="margin-top:8px"><b>Firmware Rev.03L:</b> o T6613 continua funcional pelo driver UART consolidado. Os campos abaixo preparam/documentam uma futura UART genérica, mas ainda não ativam leitura científica de protocolos arbitrários no firmware.</div>
+      <div class="smallnote" style="margin-top:8px"><b>Firmware Rev.03M:</b> o T6613 continua funcional pelo driver UART consolidado. Os campos abaixo preparam/documentam uma futura UART genérica, mas ainda não ativam leitura científica de protocolos arbitrários no firmware.</div>
       <div class="config-grid" style="margin-top:12px">
         <label>Instrumento / modelo<input id="uart_model" placeholder="Ex.: analisador CH4"></label>
         <label>Grandeza<input id="uart_qty" placeholder="Ex.: methane"></label>
@@ -104,7 +104,7 @@ details.config-group>summary{font-weight:800;color:#176b3a;cursor:pointer}
 <details class="config-group"><summary>CONVERSORES</summary>
   <details class="config-group" style="margin-top:12px"><summary>ADC-I²C / ADS1115</summary>
     <label class="checkitem" style="margin-top:12px"><input type="checkbox" id="s_converter"> <b>ATIVAR CONVERSOR ADS1115</b></label>
-    <div class="warn" style="margin-top:10px"><b>Firmware Rev.03L:</b> ADS1115 já é operacional para CO₂/ppm. Outras grandezas podem ser selecionadas abaixo para preparar/documentar a configuração, mas só passam a ser saída científica quando o firmware ganhar o mapeamento genérico correspondente.</div>
+    <div class="warn" style="margin-top:10px"><b>Firmware Rev.03M:</b> ADS1115 já é operacional para CO₂/ppm. Outras grandezas podem ser selecionadas abaixo para preparar/documentar a configuração, mas só passam a ser saída científica quando o firmware ganhar o mapeamento genérico correspondente.</div>
     <div class="config-grid" style="margin-top:12px">
       <label>Instrumento / modelo<input id="conv_model" placeholder="Ex.: Telaire T8100 (metadado)"></label>
       <label>Grandeza<select id="conv_qty"><option value="co2">CO₂</option><option value="temperature">Temperatura</option><option value="humidity">Umidade</option><option value="pressure">Pressão</option><option value="methane">CH₄ / Metano</option><option value="n2o">N₂O</option><option value="flow">Vazão</option><option value="custom">Outra / personalizada</option></select></label>
@@ -122,7 +122,7 @@ details.config-group>summary{font-weight:800;color:#176b3a;cursor:pointer}
       <label>Warm-up<select id="warm"><option value="1">INSTANTÂNEO</option><option value="0">MÉDIA PARCIAL</option></select></label>
       <select id="tmode" style="display:none"><option value="1" selected>ANALÓGICO</option><option value="2">UART</option><option value="3">AMBOS</option></select>
     </div>
-    <div id="convCompat" class="smallnote" style="margin-top:8px;font-weight:700">Compatibilidade do conversor legado preservada no FW03L.</div>
+    <div id="convCompat" class="smallnote" style="margin-top:8px;font-weight:700">Compatibilidade do conversor legado preservada no FW03M.</div>
   </details>
 </details>
 <details class="config-group"><summary>Intervalos de leitura</summary><div class="config-grid" style="margin-top:12px">
@@ -177,7 +177,7 @@ details.config-group>summary{font-weight:800;color:#176b3a;cursor:pointer}
 <section class="card" id="configCard">
 <div class="step">CONFIGURAÇÃO GRAVADA NO EQUIPAMENTO</div><h2>Leitura da configuração runtime</h2>
 <p class="note">Espelho da configuração enviada e confirmada pela transação atômica da Rev.15D2.3. O COMMIT valida todos os blocos e gera um snapshot persistente relido da NVS. A senha Wi‑Fi nunca é exibida.</p>
-<table class="config-table"><tr><th>Firmware</th><td>SENS NEXT Universal Rev.03L — GENERIC_SENSOR V1 / I2C_GENERIC</td></tr><tr><th>Nome</th><td id="cfgName">Aguardando</td></tr><tr><th>Serial / ID SENS</th><td id="cfgSerial">Aguardando</td></tr><tr><th>Projeto</th><td id="cfgProject">Aguardando</td></tr><tr><th>Local</th><td id="cfgLocation">Aguardando</td></tr><tr><th>URL da Platform</th><td id="cfgPlatformUrl">Aguardando</td></tr><tr><th>Papel</th><td id="cfgRole">Aguardando</td></tr><tr><th>Intervalo</th><td id="cfgSend">Aguardando</td></tr><tr><th>Sync Platform</th><td id="cfgSync">Aguardando</td></tr><tr><th>Sensores</th><td id="cfgSensors">Aguardando leitura</td></tr><tr><th>Avançado</th><td id="cfgAdvanced">Aguardando leitura</td></tr><tr><th>Genérico 1</th><td id="cfgGeneric1">Aguardando leitura</td></tr><tr><th>Genérico 2</th><td id="cfgGeneric2">Aguardando leitura</td></tr><tr><th>Correção 1</th><td id="cfgCorrection1">Aguardando leitura</td></tr><tr><th>Correção 2</th><td id="cfgCorrection2">Aguardando leitura</td></tr><tr><th>Transação Rev.15D2.3</th><td id="cfgTransaction">Aguardando COMMIT</td></tr><tr><th>Fingerprint</th><td id="cfgFingerprint">—</td></tr><tr><th>Fonte da identidade</th><td id="cfgIdentitySource">Aguardando confirmação</td></tr><tr><th>Wi‑Fi</th><td id="cfgWifi">Não configurado nesta sessão</td></tr><tr><th>Senha Wi‑Fi</th><td><span class="pill">não exibida</span></td></tr></table>
+<table class="config-table"><tr><th>Firmware</th><td>SENS NEXT Universal Rev.03M — GENERIC_SENSOR V1 / I2C_GENERIC</td></tr><tr><th>Nome</th><td id="cfgName">Aguardando</td></tr><tr><th>Serial / ID SENS</th><td id="cfgSerial">Aguardando</td></tr><tr><th>Projeto</th><td id="cfgProject">Aguardando</td></tr><tr><th>Local</th><td id="cfgLocation">Aguardando</td></tr><tr><th>URL da Platform</th><td id="cfgPlatformUrl">Aguardando</td></tr><tr><th>Papel</th><td id="cfgRole">Aguardando</td></tr><tr><th>Intervalo</th><td id="cfgSend">Aguardando</td></tr><tr><th>Sync Platform</th><td id="cfgSync">Aguardando</td></tr><tr><th>Sensores</th><td id="cfgSensors">Aguardando leitura</td></tr><tr><th>Avançado</th><td id="cfgAdvanced">Aguardando leitura</td></tr><tr><th>Genérico 1</th><td id="cfgGeneric1">Aguardando leitura</td></tr><tr><th>Genérico 2</th><td id="cfgGeneric2">Aguardando leitura</td></tr><tr><th>Correção 1</th><td id="cfgCorrection1">Aguardando leitura</td></tr><tr><th>Correção 2</th><td id="cfgCorrection2">Aguardando leitura</td></tr><tr><th>Transação Rev.15D2.3</th><td id="cfgTransaction">Aguardando COMMIT</td></tr><tr><th>Fingerprint</th><td id="cfgFingerprint">—</td></tr><tr><th>Fonte da identidade</th><td id="cfgIdentitySource">Aguardando confirmação</td></tr><tr><th>Wi‑Fi</th><td id="cfgWifi">Não configurado nesta sessão</td></tr><tr><th>Senha Wi‑Fi</th><td><span class="pill">não exibida</span></td></tr></table>
 <div id="cfgPanelStatus" class="status">O painel será atualizado conforme Nome, Serial e Wi‑Fi forem confirmados.</div>
 </section>
 
@@ -429,7 +429,7 @@ function wireCorrectionMenus(){
 function updateConverterCompatibilityNote(){
   const q=$("conv_qty")?.value||"co2";
   const warn=$("convCompat");
-  if(warn) warn.textContent=q==="co2"?"Compatibilidade do conversor legado preservada no FW03L.":"PREPARADO NO INSTALLER — esta grandeza ainda requer suporte no firmware para virar saída científica.";
+  if(warn) warn.textContent=q==="co2"?"Compatibilidade do conversor legado preservada no FW03M.":"PREPARADO NO INSTALLER — esta grandeza ainda requer suporte no firmware para virar saída científica.";
 }
 
 function applyConverterProfile(){

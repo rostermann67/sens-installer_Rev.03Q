@@ -1,18 +1,6 @@
-SENS INSTALLER NEXT REV03S — FW REV03M GENERIC METADATA HTTP
+SENS INSTALLER NEXT — Rev.03S / Firmware Rev.03M
 
-Base visual/configurador: REV03R FIX2 UTF8.
-Firmware embarcado: SENS NEXT Universal Rev.03M — Generic Metadata HTTP.
-
-Alteração desta revisão:
-- troca exclusivamente dos binários do firmware pelo REV03M compilado;
-- mantém os nomes públicos REV03K dos arquivos .bin para sobrescrita compatível no GitHub;
-- mantém os manifests existentes e seus endereços;
-- DO ZERO: merged.bin em 0x0000;
-- PRESERVAR: bootloader 0x1000, partitions 0x8000, boot_app0 0xE000, app 0x10000.
-
-Objetivo do REV03M:
-transportar metadados model/manufacturer dos slots genéricos no HTTP flat,
-permitindo à Platform identificar o modelo real sem inferir BH1750 pela grandeza.
-
-IMPORTANTE: os nomes REV03K dentro de /firmware são deliberados por compatibilidade
-com o repositório/manifest. O conteúdo desses arquivos é o binário REV03M.
+Base visual/configurador: Rev.03R FIX2 UTF-8.
+Cabeçalho e identificação operacional atualizados para Installer Rev.03S / Firmware Rev.03M.
+Firmware: Rev.03M com metadados genéricos model/manufacturer no transporte HTTP flat.
+Os nomes históricos dos arquivos/manifestos REV03K foram preservados para compatibilidade com os caminhos GitHub existentes.
